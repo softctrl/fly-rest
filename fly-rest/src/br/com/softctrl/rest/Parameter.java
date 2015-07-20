@@ -50,8 +50,8 @@ public final class Parameter {
 	@Override
 	public String toString() {
 		try {
-			return (new StringBuilder(encode(this.mName, BasicHTTPRestClient.Constants.UTF_8))).append('=')
-					.append(encode(this.mValue, BasicHTTPRestClient.Constants.UTF_8)).toString();
+			return (new StringBuilder(encode(this.mName, AbstractHTTPRestfulClient.Constants.UTF_8))).append('=')
+					.append(encode(this.mValue, AbstractHTTPRestfulClient.Constants.UTF_8)).toString();
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
 		}

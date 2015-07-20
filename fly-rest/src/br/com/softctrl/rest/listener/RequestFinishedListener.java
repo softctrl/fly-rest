@@ -1,5 +1,7 @@
 package br.com.softctrl.rest.listener;
 
+import br.com.softctrl.http.util.HTTPStatusCode;
+
 /*
 The MIT License (MIT)
 
@@ -30,11 +32,10 @@ SOFTWARE.
  */
 public interface RequestFinishedListener<T> {
 
-	/**
-	 * 
-	 * @param statusCode
-	 * @param response
-	 */
-	void onRequestFinished(int statusCode, T response);
+    /**
+     * @param statusCode
+     * @param response
+     */
+    void onRequestFinished(HTTPStatusCode.StatusCode statusCode, T response);
 
 }

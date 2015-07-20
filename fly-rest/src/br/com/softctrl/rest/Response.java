@@ -1,5 +1,8 @@
 package br.com.softctrl.rest;
 
+import br.com.softctrl.http.util.HTTPStatusCode;
+import br.com.softctrl.http.util.HTTPStatusCode.StatusCode;
+
 /*
 The MIT License (MIT)
 
@@ -28,21 +31,21 @@ SOFTWARE.
 /**
  * @author carlostimoshenkorodrigueslopes@gmail.com
  */
-public final class Response {
+public class Response<T> {
 
-	private int mStatusCode;
-	private String mResult;
+	private StatusCode mStatusCode;
+	private T mResult;
 
-	public Response(int statusCode, String result) {
-		this.mStatusCode = statusCode;
+	public Response(int statusCode, T result) {
+		this.mStatusCode = HTTPStatusCode.resolveStatusCode(statusCode);
 		this.mResult = result;
 	}
 
-	public int getStatusCode() {
+	public StatusCode getStatusCode() {
 		return mStatusCode;
 	}
 
-	public String getResult() {
+	public T getResult() {
 		return mResult;
 	}
 

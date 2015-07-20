@@ -1,5 +1,7 @@
 package br.com.softctrl.rest.listener;
 
+import br.com.softctrl.http.util.HTTPStatusCode;
+
 /*
 The MIT License (MIT)
 
@@ -30,10 +32,9 @@ SOFTWARE.
  */
 public interface ResponseErrorListener {
 
-	/**
-	 * 
-	 * @param throwable
-	 */
-	void onResponseError(Throwable throwable);
+    /**
+     * @param throwable
+     */
+    void onResponseError(HTTPStatusCode.StatusCode statusCode, String serverMessage, Throwable throwable);
 
 }

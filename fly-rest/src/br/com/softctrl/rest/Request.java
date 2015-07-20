@@ -31,73 +31,81 @@ import java.util.Set;
 /**
  * @author carlostimoshenkorodrigueslopes@gmail.com
  */
-public final class Request {
+public abstract class Request<T> {
 
-    private HttpMethod mHttpMethod = HttpMethod.GET; // Default method
-    private String mUrl;
-    private Set<Parameter> mParameters = new HashSet<Parameter>();
-    private String mBody;
+	private HttpMethod mHttpMethod = HttpMethod.GET; // Default method
+	private String mUrl;
+	private Set<Parameter> mParameters = new HashSet<Parameter>();
+	private T mBody;
 
-    public Request(HttpMethod httpMethod, String url, String body) {
-        this.mHttpMethod = httpMethod;
-        this.mUrl = url;
-        this.mBody = body;
-    }
+	public Request(HttpMethod httpMethod, String url, T body) {
+		this.mHttpMethod = httpMethod;
+		this.mUrl = url;
+		this.mBody = body;
+	}
 
-    public Request addParameter(String name, String value){
-        return this.addParameter(new Parameter(name, value));
-    }
+	public Request<T> addParameter(String name, String value) {
+		return this.addParameter(new Parameter(name, value));
+	}
 
-    public Request addParameter(Parameter parameter){
-        this.mParameters.add(parameter);
-        return this;
-    }
+	public Request<T> addParameter(Parameter parameter) {
+		this.mParameters.add(parameter);
+		return this;
+	}
 
-    /**
-     * 
-     * @return
-     */
-    public HttpMethod getHttpMethod() {
-        return mHttpMethod;
-    }
+	/**
+	 * 
+	 * @return
+	 */
+	public HttpMethod getHttpMethod() {
+		return mHttpMethod;
+	}
 
-    /**
-     * 
-     * @return
-     */
-    public String getUrl() {
-    	final StringBuilder url = new StringBuilder(this.mUrl);
-    	if (HttpMethod.GET.equals(this.getHttpMethod())){
-    		url.append('?').append(this.getParameters());
-    	}
-        return url.toString();
-    }
+	/**
+	 * 
+	 * @return
+	 */
+	public String getUrl() {
+		final StringBuilder url = new StringBuilder(this.mUrl);
+		if (HttpMethod.GET.equals(this.getHttpMethod())) {
+			url.append('?').append(this.getParameters());
+		}
+		return url.toString();
+	}
 
-    /**
-     * 
-     * @return
-     */
-    public String getBody() {
-        return mBody;
-    }
+	/**
+	 * 
+	 * @return
+	 */
+	public T getBody() {
+		return mBody;
+	}
 
-    /**
-     * 
-     * @return
-     */
-    public String getParameters() {
+	/**
+	 * 
+	 * @return
+	 */
+	public String getParameters() {
 
-        if (this.mParameters.size() > 0) {
-            StringBuilder parameters = new StringBuilder();
-            Parameter[] params = this.mParameters.toArray(new Parameter[]{});
-            parameters.append(params[0].toString());
-            for(int idx = 1; idx  < params.length; idx++) {
-                parameters.append('&').append(params[idx].toString());
-            }
-            return parameters.toString();
-        }
-        return null;
+		if (this.mParameters.size() > 0) {
+			StringBuilder parameters = new StringBuilder();
+			Parameter[] params = this.mParameters.toArray(new Parameter[] {});
+			parameters.append(params[0].toString());
+			for (int idx = 1; idx < params.length; idx++) {
+				parameters.append('&').append(params[idx].toString());
+			}
+			return parameters.toString();
+		}
+		return null;
 
-    }
+	}
+
+	/**
+	 * We need implement this method to parse the response.
+	 * 
+	 * @param response
+	 * @return
+	 */
+	public abstract Response<T> parseResponse(int statusCode, String result);
 
 }
