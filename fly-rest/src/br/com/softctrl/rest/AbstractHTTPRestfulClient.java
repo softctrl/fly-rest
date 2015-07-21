@@ -165,7 +165,7 @@ public abstract class AbstractHTTPRestfulClient<T> {
 			connection.connect();
 			final String response = inputStreamToString(connection.getInputStream());
 			result = request.parseResponse(connection.getResponseCode(), response);
-			this.mResponseListener.onResponse(result.getResult());
+			this.mResponseListener.onResponse(result == null ? null : result.getResult());
 		} catch (IOException e) {
 			try {
 				final String response = inputStreamToString(connection.getErrorStream());
