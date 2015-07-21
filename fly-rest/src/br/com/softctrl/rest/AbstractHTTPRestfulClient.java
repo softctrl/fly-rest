@@ -140,7 +140,7 @@ public abstract class AbstractHTTPRestfulClient<T> {
 			connection.setRequestMethod(httpMethod.getName());
 			connection.setConnectTimeout(this.mConnectTimeout);
 			connection.setReadTimeout(this.mReadTimeout);
-			connection.setRequestProperty(Constants.ACCEPT_ENCODING, Constants.UTF_8);
+			connection.setRequestProperty(Constants.ACCEPT_ENCODING, this.mEncoding);
 			connection.setRequestProperty(Constants.CONTENT_TYPE, Constants.APPLICATION_JSON);
 		} catch (Exception e) {
 			e.printStackTrace();
