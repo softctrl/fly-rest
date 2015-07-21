@@ -141,7 +141,7 @@ public abstract class AbstractHTTPRestfulClient<T> {
 			connection.setConnectTimeout(this.mConnectTimeout);
 			connection.setReadTimeout(this.mReadTimeout);
 			connection.setRequestProperty(Constants.ACCEPT_ENCODING, this.mEncoding);
-			connection.setRequestProperty(Constants.CONTENT_TYPE, Constants.APPLICATION_JSON);
+			connection.setRequestProperty(Constants.CONTENT_TYPE, this.mContentType);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
