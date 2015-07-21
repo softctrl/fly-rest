@@ -47,6 +47,9 @@ public abstract class AbstractHTTPRestfulClient<T> {
 
 	private int mConnectTimeout = Constants.CONNECT_TIMEOUT;
 	private int mReadTimeout = Constants.READ_TIMEOUT;
+	private String mEncoding = Constants.UTF_8; 
+	private String mContentType = Constants.APPLICATION_JSON;
+
 	private ResponseListener<T> mResponseListener;
 	private ResponseErrorListener mResponseErrorListener;
 	private RequestFinishedListener<T> mRequestFinishedListener;
