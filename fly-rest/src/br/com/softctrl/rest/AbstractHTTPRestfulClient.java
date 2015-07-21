@@ -105,6 +105,25 @@ public abstract class AbstractHTTPRestfulClient<T> {
 		this.mReadTimeout = readTimeout;
 		return this;
 	}
+	
+	/**
+	 * @param encoding the encoding to set
+	 * @return 
+	 */
+	public AbstractHTTPRestfulClient<T> setmEncoding(String encoding) {
+		this.mEncoding = encoding;
+		return this;
+	}
+
+	/**
+	 * @param contentType the content type to set
+	 * @return 
+	 */
+	public AbstractHTTPRestfulClient<T> setmContentType(String contentType) {
+		this.mContentType = contentType;
+		return this;
+	}
+	
 
 	/**
 	 * @param url
