@@ -65,8 +65,8 @@ public final class HTTPStatusCode {
 		}
 
 		/**
-		 *
-		 * @return
+		 * 
+		 * @return true if that status code was about Timeout.
 		 */
 		public boolean isTimeoutError() {
 			// 408 - Request Timeout - [RFC7231, Section 6.5.7]
@@ -159,7 +159,7 @@ public final class HTTPStatusCode {
 	}
 
 	/**
-	 *
+	 * 
 	 * @param statusCode
 	 * @return
 	 */

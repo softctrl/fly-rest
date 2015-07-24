@@ -32,10 +32,11 @@ SOFTWARE.
  */
 public interface RequestFinishedListener<T> {
 
-    /**
-     * @param statusCode
-     * @param response
-     */
+	/**
+	 * 
+	 * @param statusCode
+	 * @param response
+	 */
     void onRequestFinished(HTTPStatusCode.StatusCode statusCode, T response);
 
 }

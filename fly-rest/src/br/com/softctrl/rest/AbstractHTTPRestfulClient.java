@@ -47,7 +47,7 @@ public abstract class AbstractHTTPRestfulClient<T> {
 
 	private int mConnectTimeout = Constants.CONNECT_TIMEOUT;
 	private int mReadTimeout = Constants.READ_TIMEOUT;
-	private String mEncoding = Constants.UTF_8; 
+	private String mEncoding = Constants.UTF_8;
 	private String mContentType = Constants.APPLICATION_JSON;
 
 	private ResponseListener<T> mResponseListener;
@@ -89,26 +89,28 @@ public abstract class AbstractHTTPRestfulClient<T> {
 	}
 
 	/**
+	 * 
 	 * @param connectTimeout
 	 * @return
 	 */
 	public AbstractHTTPRestfulClient<T> setConnectTimeout(int connectTimeout) {
-		this.mConnectTimeout = connectTimeout;
+		this.mConnectTimeout = connectTimeout * 1000;
 		return this;
 	}
 
 	/**
-	 * @param readTimeout
+	 * @param readTimeout in seconds
 	 * @return
 	 */
 	public AbstractHTTPRestfulClient<T> setReadTimeout(int readTimeout) {
-		this.mReadTimeout = readTimeout;
+		this.mReadTimeout = readTimeout * 1000;
 		return this;
 	}
-	
+
 	/**
-	 * @param encoding the encoding to set
-	 * @return 
+	 * @param encoding
+	 *            the encoding to set
+	 * @return
 	 */
 	public AbstractHTTPRestfulClient<T> setmEncoding(String encoding) {
 		this.mEncoding = encoding;
@@ -116,14 +118,14 @@ public abstract class AbstractHTTPRestfulClient<T> {
 	}
 
 	/**
-	 * @param contentType the content type to set
-	 * @return 
+	 * @param contentType
+	 *            the content type to set
+	 * @return
 	 */
 	public AbstractHTTPRestfulClient<T> setmContentType(String contentType) {
 		this.mContentType = contentType;
 		return this;
 	}
-	
 
 	/**
 	 * @param url
@@ -203,6 +205,8 @@ public abstract class AbstractHTTPRestfulClient<T> {
 	}
 
 	/**
+	 * 
+	 * @param httpMethod
 	 * @param url
 	 * @param body
 	 * @param parameters
@@ -228,6 +232,7 @@ public abstract class AbstractHTTPRestfulClient<T> {
 	}
 
 	/**
+	 * 
 	 * @param url
 	 * @param body
 	 * @param parameters

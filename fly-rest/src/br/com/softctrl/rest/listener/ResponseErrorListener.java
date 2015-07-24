@@ -32,9 +32,12 @@ SOFTWARE.
  */
 public interface ResponseErrorListener {
 
-    /**
-     * @param throwable
-     */
+	/**
+	 * 
+	 * @param statusCode
+	 * @param serverMessage
+	 * @param throwable
+	 */
     void onResponseError(HTTPStatusCode.StatusCode statusCode, String serverMessage, Throwable throwable);
 
 }

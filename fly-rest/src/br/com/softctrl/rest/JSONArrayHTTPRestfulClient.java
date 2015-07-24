@@ -40,6 +40,7 @@ public final class JSONArrayHTTPRestfulClient extends AbstractHTTPRestfulClient<
 		final Request<JSONArray> request = new Request<JSONArray>(httpMethod, url, body) {
 			@Override
 			public Response<JSONArray> parseResponse(int statusCode, String result) {
+				System.out.println(result);
 				return new Response<JSONArray>(statusCode, new JSONArray(result));
 			}
 		};
