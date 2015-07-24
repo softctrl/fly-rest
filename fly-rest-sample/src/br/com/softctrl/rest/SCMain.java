@@ -1,7 +1,5 @@
 package br.com.softctrl.rest;
 
-import java.lang.reflect.GenericArrayType;
-
 import br.com.softctrl.http.util.HTTPStatusCode.StatusCode;
 import br.com.softctrl.rest.listener.RequestFinishedListener;
 import br.com.softctrl.rest.listener.ResponseErrorListener;
