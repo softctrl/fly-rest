@@ -28,33 +28,55 @@ SOFTWARE.
 import static java.net.URLEncoder.encode;
 
 import java.io.UnsupportedEncodingException;
+import java.util.Base64;
 
 /**
  * @author carlostimoshenkorodrigueslopes@gmail.com
  */
-public final class Parameter {
-	private String mName;
+public final class Property {
+	private String mKey;
 	private String mValue;
 
-	public Parameter(String name, String value) {
-		this.mName = name;
+	public Property(String key, String value) {
+		this.mKey = key;
 		this.mValue = value;
 	}
 
 	@Override
 	public boolean equals(Object o) {
-		return Objects.equals(this.mName, ((Parameter) o).mName);		
+		return Objects.equals(this.mKey, ((Property) o).mKey);		
 	}
+	
+	/**
+	 * @return the key
+	 */
+	public String getKey() {
+		return mKey;
+	}
+	
+	/**
+	 * @return the value
+	 */
+	public String getValue() {
+		return mValue;
+	}
+	
+	public synchronized static final Property getBasicHttpAuthenticationProperty(String username, String password) {
+		StringBuilder encoded = new StringBuilder("Basic ").append(Base64.getEncoder()
+				.encodeToString((new StringBuilder(username).append(':').append(password)).toString().getBytes()));
+		return new Property("Authorization", encoded.toString());
+	}
+
 
 	@Override
 	public String toString() {
 		try {
-			return (new StringBuilder(encode(this.mName, AbstractHTTPRestfulClient.Constants.UTF_8))).append('=')
+			return (new StringBuilder(encode(this.mKey, AbstractHTTPRestfulClient.Constants.UTF_8))).append('=')
 					.append(encode(this.mValue, AbstractHTTPRestfulClient.Constants.UTF_8)).toString();
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
 		}
-		return String.format("%s=%s", this.mName, this.mValue);
+		return String.format("%s=%s", this.mKey, this.mValue);
 	}
 
 }

@@ -34,6 +34,7 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.Set;
 
 import br.com.softctrl.http.util.HTTPStatusCode;
 import br.com.softctrl.rest.listener.RequestFinishedListener;
@@ -46,6 +47,7 @@ import br.com.softctrl.rest.listener.ResponseListener;
 public abstract class AbstractHTTPRestfulClient<T> {
 
 	private int mConnectTimeout = Constants.CONNECT_TIMEOUT;
+	private Property mBasicHttpAuthentication = null;
 	private int mReadTimeout = Constants.READ_TIMEOUT;
 	private String mEncoding = Constants.UTF_8;
 	private String mContentType = Constants.APPLICATION_JSON;
@@ -112,7 +114,7 @@ public abstract class AbstractHTTPRestfulClient<T> {
 	 *            the encoding to set
 	 * @return
 	 */
-	public AbstractHTTPRestfulClient<T> setmEncoding(String encoding) {
+	public AbstractHTTPRestfulClient<T> setEncoding(String encoding) {
 		this.mEncoding = encoding;
 		return this;
 	}
@@ -122,8 +124,18 @@ public abstract class AbstractHTTPRestfulClient<T> {
 	 *            the content type to set
 	 * @return
 	 */
-	public AbstractHTTPRestfulClient<T> setmContentType(String contentType) {
+	public AbstractHTTPRestfulClient<T> setContentType(String contentType) {
 		this.mContentType = contentType;
+		return this;
+	}
+
+	/**
+	 * @param contentType
+	 *            the content type to set
+	 * @return
+	 */
+	public AbstractHTTPRestfulClient<T> setBasicAuthentication(String username, String password) {
+		this.mBasicHttpAuthentication = Property.getBasicHttpAuthenticationProperty(username, password);
 		return this;
 	}
 
@@ -184,6 +196,16 @@ public abstract class AbstractHTTPRestfulClient<T> {
 					dataOutputStream.writeBytes(request.getBody().toString());
 					dataOutputStream.flush();
 					dataOutputStream.close();
+				}
+			}
+			// Basic HTTP Authentication
+			if (this.mBasicHttpAuthentication != null) {
+				connection.setRequestProperty(this.mBasicHttpAuthentication.getKey(), this.mBasicHttpAuthentication.getValue());
+			}
+			final Set<Property> properties = request.getProperties();
+			if (properties != null && properties.size() > 0) {
+				for (Property property : properties) {
+					connection.setRequestProperty(property.getKey(), property.getValue());
 				}
 			}
 			connection.connect();

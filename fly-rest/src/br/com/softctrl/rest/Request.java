@@ -36,6 +36,7 @@ public abstract class Request<T> {
 	private HttpMethod mHttpMethod = HttpMethod.GET; // Default method
 	private String mUrl;
 	private Set<Parameter> mParameters = new HashSet<Parameter>();
+	private Set<Property> mProperties = new HashSet<Property>();
 	private T mBody;
 
 	public Request(HttpMethod httpMethod, String url, T body) {
@@ -50,6 +51,15 @@ public abstract class Request<T> {
 
 	public Request<T> addParameter(Parameter parameter) {
 		this.mParameters.add(parameter);
+		return this;
+	}
+
+	public Request<T> addProperty(String name, String value) {
+		return this.addProperty(new Property(name, value));
+	}
+
+	public Request<T> addProperty(Property property) {
+		this.mProperties.add(property);
 		return this;
 	}
 
@@ -98,6 +108,13 @@ public abstract class Request<T> {
 		}
 		return null;
 
+	}
+
+	/**
+	 * @return the mProperties
+	 */
+	public Set<Property> getProperties() {
+		return mProperties;
 	}
 
 	/**
