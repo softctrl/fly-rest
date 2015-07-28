@@ -283,7 +283,7 @@ public abstract class AbstractHTTPRestfulClient<T> {
 
 	public static final class Constants {
 
-		public static final int CONNECT_TIMEOUT = 5000; // 5 Segundos
+		public static final int CONNECT_TIMEOUT = 5000; // 5 seconds
 		public static final int READ_TIMEOUT = CONNECT_TIMEOUT;
 
 		public static final String ACCEPT_ENCODING = "Accept-Encoding";
