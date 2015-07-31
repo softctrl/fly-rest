@@ -4,6 +4,7 @@
 package br.com.softctrl.rest;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import br.com.softctrl.rest.listener.RequestFinishedListener;
@@ -40,7 +41,13 @@ public final class JSONObjectHTTPRestfulClient extends AbstractHTTPRestfulClient
 		final Request<JSONObject> request = new Request<JSONObject>(httpMethod, url, body) {
 			@Override
 			public Response<JSONObject> parseResponse(int statusCode, String result) {
-				return new Response<JSONObject>(statusCode, new JSONObject(result));
+                Response<JSONObject> response = null;
+                try {
+                    response = new Response<JSONObject>(statusCode, new JSONObject(result));
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                return response;
 			}
 		};
 		if (parameters != null && parameters.length > 0) {
