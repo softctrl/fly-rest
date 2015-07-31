@@ -1,6 +1,4 @@
-package br.com.softctrl.rest.listener;
-
-import br.com.softctrl.http.util.HTTPStatusCode;
+package br.com.softctrl.http.rest;
 
 /*
 The MIT License (MIT)
@@ -30,14 +28,17 @@ SOFTWARE.
 /**
  * @author carlostimoshenkorodrigueslopes@gmail.com
  */
-public interface ResponseErrorListener {
+public enum HttpMethod {
 
-	/**
-	 * 
-	 * @param statusCode
-	 * @param serverMessage
-	 * @param throwable
-	 */
-    void onResponseError(HTTPStatusCode.StatusCode statusCode, String serverMessage, Throwable throwable);
+	POST("POST"), GET("GET"), DELETE("DELETE"), PUT("PUT"), OPTIONS("OPTIONS"), HEAD("HEAD"), TRACE("TRACE");
 
+	private String mName;
+
+	private HttpMethod(String name) {
+		this.mName = name;
+	}
+
+	public String getName() {
+		return mName;
+	}
 }

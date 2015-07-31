@@ -1,4 +1,4 @@
-package br.com.softctrl.rest.listener;
+package br.com.softctrl.http.rest.listener;
 
 /*
 The MIT License (MIT)

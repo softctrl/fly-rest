@@ -1,4 +1,4 @@
-package br.com.softctrl.rest.listener;
+package br.com.softctrl.http.rest.listener;
 
 import br.com.softctrl.http.util.HTTPStatusCode;
 
@@ -30,13 +30,14 @@ SOFTWARE.
 /**
  * @author carlostimoshenkorodrigueslopes@gmail.com
  */
-public interface RequestFinishedListener<T> {
+public interface ResponseErrorListener {
 
 	/**
 	 * 
 	 * @param statusCode
-	 * @param response
+	 * @param serverMessage
+	 * @param throwable
 	 */
-    void onRequestFinished(HTTPStatusCode.StatusCode statusCode, T response);
+    void onResponseError(HTTPStatusCode.StatusCode statusCode, String serverMessage, Throwable throwable);
 
 }

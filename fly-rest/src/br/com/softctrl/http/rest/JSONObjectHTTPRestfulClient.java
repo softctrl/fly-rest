@@ -1,15 +1,15 @@
 /**
  * 
  */
-package br.com.softctrl.rest;
+package br.com.softctrl.http.rest;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import br.com.softctrl.rest.listener.RequestFinishedListener;
-import br.com.softctrl.rest.listener.ResponseErrorListener;
-import br.com.softctrl.rest.listener.ResponseListener;
+import br.com.softctrl.http.rest.listener.RequestFinishedListener;
+import br.com.softctrl.http.rest.listener.ResponseErrorListener;
+import br.com.softctrl.http.rest.listener.ResponseListener;
 
 /**
  * @author timoshenko
@@ -31,9 +31,9 @@ public final class JSONObjectHTTPRestfulClient extends AbstractHTTPRestfulClient
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see br.com.softctrl.rest.AbstractHTTPRestfulClient#createRequest(br.com.
+	 * @see br.com.softctrl.http.rest.AbstractHTTPRestfulClient#createRequest(br.com.
 	 * softctrl.rest.HttpMethod, java.lang.String, java.lang.Object,
-	 * br.com.softctrl.rest.Parameter[])
+	 * br.com.softctrl.http.rest.Parameter[])
 	 */
 	@Override
 	protected Request<JSONObject> createRequest(HttpMethod httpMethod, String url, JSONObject body,

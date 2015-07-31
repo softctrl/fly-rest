@@ -1,4 +1,4 @@
-package br.com.softctrl.rest;
+package br.com.softctrl.http.rest;
 
 import br.com.softctrl.http.util.HTTPStatusCode;
 import br.com.softctrl.http.util.HTTPStatusCode.StatusCode;

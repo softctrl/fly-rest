@@ -1,11 +1,11 @@
 /**
  * 
  */
-package br.com.softctrl.rest;
+package br.com.softctrl.http.rest;
 
-import br.com.softctrl.rest.listener.RequestFinishedListener;
-import br.com.softctrl.rest.listener.ResponseErrorListener;
-import br.com.softctrl.rest.listener.ResponseListener;
+import br.com.softctrl.http.rest.listener.RequestFinishedListener;
+import br.com.softctrl.http.rest.listener.ResponseErrorListener;
+import br.com.softctrl.http.rest.listener.ResponseListener;
 
 /**
  * @author timoshenko
@@ -27,9 +27,9 @@ public final class StringHTTPRestfulClient extends AbstractHTTPRestfulClient<Str
 	 * (non-Javadoc)
 	 * 
 	 * @see
-	 * br.com.softctrl.rest.BasicHTTPRestClient#createRequest(br.com.softctrl.
+	 * br.com.softctrl.http.rest.BasicHTTPRestClient#createRequest(br.com.softctrl.
 	 * rest.HttpMethod, java.lang.String, java.lang.Object,
-	 * br.com.softctrl.rest.Parameter[])
+	 * br.com.softctrl.http.rest.Parameter[])
 	 */
 	@Override
 	protected Request<String> createRequest(HttpMethod httpMethod, String url, String body, Parameter... parameters) {

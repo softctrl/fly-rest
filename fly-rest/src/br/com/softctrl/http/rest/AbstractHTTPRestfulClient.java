@@ -1,4 +1,4 @@
-package br.com.softctrl.rest;
+package br.com.softctrl.http.rest;
 
 /*
 The MIT License (MIT)
@@ -36,10 +36,10 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Set;
 
+import br.com.softctrl.http.rest.listener.RequestFinishedListener;
+import br.com.softctrl.http.rest.listener.ResponseErrorListener;
+import br.com.softctrl.http.rest.listener.ResponseListener;
 import br.com.softctrl.http.util.HTTPStatusCode;
-import br.com.softctrl.rest.listener.RequestFinishedListener;
-import br.com.softctrl.rest.listener.ResponseErrorListener;
-import br.com.softctrl.rest.listener.ResponseListener;
 
 /**
  * @author carlostimoshenkorodrigueslopes@gmail.com
