@@ -28,7 +28,6 @@ SOFTWARE.
 import static java.net.URLEncoder.encode;
 
 import java.io.UnsupportedEncodingException;
-import java.util.Base64;
 
 /**
  * @author carlostimoshenkorodrigueslopes@gmail.com
@@ -44,29 +43,29 @@ public final class Property {
 
 	@Override
 	public boolean equals(Object o) {
-		return Objects.equals(this.mKey, ((Property) o).mKey);		
+		return Objects.equals(this.mKey, ((Property) o).mKey);
 	}
-	
+
 	/**
 	 * @return the key
 	 */
 	public String getKey() {
 		return mKey;
 	}
-	
+
 	/**
 	 * @return the value
 	 */
 	public String getValue() {
 		return mValue;
 	}
-	
+
 	public synchronized static final Property getBasicHttpAuthenticationProperty(String username, String password) {
-		StringBuilder encoded = new StringBuilder("Basic ").append(Base64.getEncoder()
-				.encodeToString((new StringBuilder(username).append(':').append(password)).toString().getBytes()));
+		StringBuilder encoded = new StringBuilder("Basic ").append(android.util.Base64.encodeToString(
+				(new StringBuilder(username).append(':').append(password)).toString().getBytes(),
+				android.util.Base64.DEFAULT));
 		return new Property("Authorization", encoded.toString());
 	}
-
 
 	@Override
 	public String toString() {
