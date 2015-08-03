@@ -33,6 +33,13 @@ import java.io.UnsupportedEncodingException;
  * @author carlostimoshenkorodrigueslopes@gmail.com
  */
 public final class Property {
+
+	private static final char EQUALS = '=';
+	private static final String S_S = "%s=%s";
+	private static final String AUTHORIZATION = "Authorization";
+	private static final char COLON = ':';
+	private static final String BASIC = "Basic ";
+	
 	private String mKey;
 	private String mValue;
 
@@ -61,21 +68,21 @@ public final class Property {
 	}
 
 	public synchronized static final Property getBasicHttpAuthenticationProperty(String username, String password) {
-		StringBuilder encoded = new StringBuilder("Basic ").append(android.util.Base64.encodeToString(
-				(new StringBuilder(username).append(':').append(password)).toString().getBytes(),
+		StringBuilder encoded = new StringBuilder(BASIC).append(android.util.Base64.encodeToString(
+				(new StringBuilder(username).append(COLON).append(password)).toString().getBytes(),
 				android.util.Base64.DEFAULT));
-		return new Property("Authorization", encoded.toString());
+		return new Property(AUTHORIZATION, encoded.toString());
 	}
 
 	@Override
 	public String toString() {
 		try {
-			return (new StringBuilder(encode(this.mKey, AbstractHTTPRestfulClient.Constants.UTF_8))).append('=')
+			return (new StringBuilder(encode(this.mKey, AbstractHTTPRestfulClient.Constants.UTF_8))).append(EQUALS)
 					.append(encode(this.mValue, AbstractHTTPRestfulClient.Constants.UTF_8)).toString();
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
 		}
-		return String.format("%s=%s", this.mKey, this.mValue);
+		return String.format(S_S, this.mKey, this.mValue);
 	}
 
 }
