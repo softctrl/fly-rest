@@ -187,7 +187,10 @@ public abstract class AbstractHTTPRestfulClient<T> {
 		HttpURLConnection connection = null;
 		try {
 			uri = new URL(url);
-			connection = (HttpURLConnection) uri.openConnection();
+			if (mProxy == null)
+				connection = (HttpURLConnection) uri.openConnection();
+			else 
+				connection = (HttpURLConnection) uri.openConnection(mProxy);
 			connection.setRequestMethod(httpMethod.getName());
 			connection.setConnectTimeout(this.mConnectTimeout);
 			connection.setReadTimeout(this.mReadTimeout);
