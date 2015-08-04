@@ -176,18 +176,6 @@ public abstract class AbstractHTTPRestfulClient<T> {
 		return setProxy(type, hostname, port);
 	}
 	
-	/*
-		Authenticator authenticator = new Authenticator() {
-
-	        public PasswordAuthentication getPasswordAuthentication() {
-	            																										                                                                            return (new PasswordAuthentication("c926627","*ctrl*".toCharArray()));
-	        }
-	    };
-	    Authenticator.setDefault(authenticator);
-	    Proxy proxy = new Proxy(Proxy.Type.HTTP, new InetSocketAddress("10.23.242.12", 8080));
-	 * */
-	
-
 	/**
 	 * @param url
 	 * @param httpMethod
