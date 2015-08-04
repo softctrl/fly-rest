@@ -29,6 +29,8 @@ import static java.net.URLEncoder.encode;
 
 import java.io.UnsupportedEncodingException;
 
+import br.com.softctrl.util.Base64;
+
 /**
  * @author carlostimoshenkorodrigueslopes@gmail.com
  */
@@ -39,7 +41,7 @@ public final class Property {
 	private static final String AUTHORIZATION = "Authorization";
 	private static final char COLON = ':';
 	private static final String BASIC = "Basic ";
-	
+
 	private String mKey;
 	private String mValue;
 
@@ -68,9 +70,8 @@ public final class Property {
 	}
 
 	public synchronized static final Property getBasicHttpAuthenticationProperty(String username, String password) {
-		StringBuilder encoded = new StringBuilder(BASIC).append(android.util.Base64.encodeToString(
-				(new StringBuilder(username).append(COLON).append(password)).toString().getBytes(),
-				android.util.Base64.DEFAULT));
+		StringBuilder encoded = new StringBuilder(BASIC).append(Base64.encodeToString(
+				(new StringBuilder(username).append(COLON).append(password)).toString().getBytes(), Base64.DEFAULT));
 		return new Property(AUTHORIZATION, encoded.toString());
 	}
 
