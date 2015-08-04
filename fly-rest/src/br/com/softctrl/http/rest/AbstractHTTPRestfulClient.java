@@ -32,7 +32,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
+import java.net.Authenticator;
 import java.net.HttpURLConnection;
+import java.net.InetSocketAddress;
+import java.net.PasswordAuthentication;
+import java.net.Proxy;
 import java.net.URL;
 import java.util.Set;
 
@@ -55,6 +59,8 @@ public abstract class AbstractHTTPRestfulClient<T> {
 	private ResponseListener<T> mResponseListener;
 	private ResponseErrorListener mResponseErrorListener;
 	private RequestFinishedListener<T> mRequestFinishedListener;
+	
+	private Proxy mProxy = null;
 
 	/**
 	 * @param responseListener
@@ -89,7 +95,7 @@ public abstract class AbstractHTTPRestfulClient<T> {
 		}
 		return null;
 	}
-
+	
 	/**
 	 * 
 	 * @param connectTimeout
@@ -128,6 +134,8 @@ public abstract class AbstractHTTPRestfulClient<T> {
 		this.mContentType = contentType;
 		return this;
 	}
+	
+	
 
 	/**
 	 * @param contentType
@@ -138,6 +146,47 @@ public abstract class AbstractHTTPRestfulClient<T> {
 		this.mBasicHttpAuthentication = Property.getBasicHttpAuthenticationProperty(username, password);
 		return this;
 	}
+	
+	public AbstractHTTPRestfulClient<T> setProxy(String hostname, int port) {
+		return setProxy(Proxy.Type.HTTP, hostname, port);
+	}
+	
+	public AbstractHTTPRestfulClient<T> setProxy(Proxy.Type type, String hostname, int port) {
+		this.mProxy = new Proxy(type, new InetSocketAddress(hostname, port));
+		return this;
+	}
+	
+	public AbstractHTTPRestfulClient<T> setProxy(final String username, final String password, final String hostname, final int port) {
+		Authenticator authenticator = new Authenticator() {
+	        public PasswordAuthentication getPasswordAuthentication() {
+	        	return (new PasswordAuthentication(username,(password + "").toCharArray()));
+	        }
+	    };
+	    Authenticator.setDefault(authenticator);
+		return setProxy(hostname, port);
+	}
+	
+	public AbstractHTTPRestfulClient<T> setProxy(Proxy.Type type, final String username, final String password, String hostname, int port) {
+		Authenticator authenticator = new Authenticator() {
+	        public PasswordAuthentication getPasswordAuthentication() {
+	        	return (new PasswordAuthentication(username,(password + "").toCharArray()));
+	        }
+	    };
+	    Authenticator.setDefault(authenticator);
+		return setProxy(type, hostname, port);
+	}
+	
+	/*
+		Authenticator authenticator = new Authenticator() {
+
+	        public PasswordAuthentication getPasswordAuthentication() {
+	            																										                                                                            return (new PasswordAuthentication("c926627","*ctrl*".toCharArray()));
+	        }
+	    };
+	    Authenticator.setDefault(authenticator);
+	    Proxy proxy = new Proxy(Proxy.Type.HTTP, new InetSocketAddress("10.23.242.12", 8080));
+	 * */
+	
 
 	/**
 	 * @param url

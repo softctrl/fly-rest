@@ -31,5 +31,12 @@
 			<artifactId>json</artifactId>
 			<version>20141113</version>
 		</dependency>
+
+<!-- 		<dependency> -->
+<!-- 			<groupId>com.google.android</groupId> -->
+<!-- 			<artifactId>android</artifactId> -->
+<!-- 			<version>4.1.1.4</version> -->
+<!-- 		</dependency> -->
+
 	</dependencies>
 </project>
