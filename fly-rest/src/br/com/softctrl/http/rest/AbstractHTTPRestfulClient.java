@@ -147,6 +147,11 @@ public abstract class AbstractHTTPRestfulClient<T> {
 		return this;
 	}
 	
+	public AbstractHTTPRestfulClient<T> setProxy(Proxy proxy) {
+		this.mProxy = proxy;
+		return this;
+	}
+	
 	public AbstractHTTPRestfulClient<T> setProxy(String hostname, int port) {
 		return setProxy(Proxy.Type.HTTP, hostname, port);
 	}
@@ -187,7 +192,7 @@ public abstract class AbstractHTTPRestfulClient<T> {
 		HttpURLConnection connection = null;
 		try {
 			uri = new URL(url);
-			if (mProxy == null)
+			if (this.mProxy == null)
 				connection = (HttpURLConnection) uri.openConnection();
 			else 
 				connection = (HttpURLConnection) uri.openConnection(mProxy);
