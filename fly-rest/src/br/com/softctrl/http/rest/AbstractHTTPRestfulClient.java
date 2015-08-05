@@ -1,5 +1,7 @@
 package br.com.softctrl.http.rest;
 
+import static br.com.softctrl.http.util.StreamUtils.inputStreamToString;
+
 /*
 The MIT License (MIT)
 
@@ -26,10 +28,8 @@ SOFTWARE.
 */
 
 import java.io.BufferedWriter;
-import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.net.Authenticator;
@@ -46,9 +46,12 @@ import br.com.softctrl.http.rest.listener.ResponseListener;
 import br.com.softctrl.http.util.HTTPStatusCode;
 
 /**
+ * [R]equest
+ * Re[S]ponse
+ * 
  * @author carlostimoshenkorodrigueslopes@gmail.com
  */
-public abstract class AbstractHTTPRestfulClient<T> {
+public abstract class AbstractHTTPRestfulClient<R, S> {
 
 	private int mConnectTimeout = Constants.CONNECT_TIMEOUT;
 	private Property mBasicHttpAuthentication = null;
@@ -56,10 +59,10 @@ public abstract class AbstractHTTPRestfulClient<T> {
 	private String mEncoding = Constants.UTF_8;
 	private String mContentType = Constants.APPLICATION_JSON;
 
-	private ResponseListener<T> mResponseListener;
+	private ResponseListener<S> mResponseListener;
 	private ResponseErrorListener mResponseErrorListener;
-	private RequestFinishedListener<T> mRequestFinishedListener;
-	
+	private RequestFinishedListener<S> mRequestFinishedListener;
+
 	private Proxy mProxy = null;
 
 	/**
@@ -67,50 +70,30 @@ public abstract class AbstractHTTPRestfulClient<T> {
 	 * @param responseErrorListener
 	 * @param requestFinishedListener
 	 */
-	public AbstractHTTPRestfulClient(final ResponseListener<T> responseListener,
+	public AbstractHTTPRestfulClient(final ResponseListener<S> responseListener,
 			final ResponseErrorListener responseErrorListener,
-			final RequestFinishedListener<T> requestFinishedListener) {
+			final RequestFinishedListener<S> requestFinishedListener) {
 		this.mResponseListener = responseListener;
 		this.mResponseErrorListener = responseErrorListener;
 		this.mRequestFinishedListener = requestFinishedListener;
 	}
 
 	/**
-	 * @param inputStream
-	 * @return
-	 */
-	private static final String inputStreamToString(InputStream inputStream) {
-		final ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-		if (inputStream != null) {
-			final byte[] buffer = new byte[1024];
-			int length = 0;
-			try {
-				while ((length = inputStream.read(buffer)) != -1) {
-					byteArrayOutputStream.write(buffer, 0, length);
-				}
-				return byteArrayOutputStream.toString();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
-		return null;
-	}
-	
-	/**
 	 * 
 	 * @param connectTimeout
 	 * @return
 	 */
-	public AbstractHTTPRestfulClient<T> setConnectTimeout(int connectTimeout) {
+	public AbstractHTTPRestfulClient<R, S> setConnectTimeout(int connectTimeout) {
 		this.mConnectTimeout = connectTimeout * 1000;
 		return this;
 	}
 
 	/**
-	 * @param readTimeout in seconds
+	 * @param readTimeout
+	 *            in seconds
 	 * @return
 	 */
-	public AbstractHTTPRestfulClient<T> setReadTimeout(int readTimeout) {
+	public AbstractHTTPRestfulClient<R, S> setReadTimeout(int readTimeout) {
 		this.mReadTimeout = readTimeout * 1000;
 		return this;
 	}
@@ -120,7 +103,7 @@ public abstract class AbstractHTTPRestfulClient<T> {
 	 *            the encoding to set
 	 * @return
 	 */
-	public AbstractHTTPRestfulClient<T> setEncoding(String encoding) {
+	public AbstractHTTPRestfulClient<R, S> setEncoding(String encoding) {
 		this.mEncoding = encoding;
 		return this;
 	}
@@ -130,57 +113,57 @@ public abstract class AbstractHTTPRestfulClient<T> {
 	 *            the content type to set
 	 * @return
 	 */
-	public AbstractHTTPRestfulClient<T> setContentType(String contentType) {
+	public AbstractHTTPRestfulClient<R, S> setContentType(String contentType) {
 		this.mContentType = contentType;
 		return this;
 	}
-	
-	
 
 	/**
 	 * @param contentType
 	 *            the content type to set
 	 * @return
 	 */
-	public AbstractHTTPRestfulClient<T> setBasicAuthentication(String username, String password) {
+	public AbstractHTTPRestfulClient<R, S> setBasicAuthentication(String username, String password) {
 		this.mBasicHttpAuthentication = Property.getBasicHttpAuthenticationProperty(username, password);
 		return this;
 	}
-	
-	public AbstractHTTPRestfulClient<T> setProxy(Proxy proxy) {
+
+	public AbstractHTTPRestfulClient<R, S> setProxy(Proxy proxy) {
 		this.mProxy = proxy;
 		return this;
 	}
-	
-	public AbstractHTTPRestfulClient<T> setProxy(String hostname, int port) {
+
+	public AbstractHTTPRestfulClient<R, S> setProxy(String hostname, int port) {
 		return setProxy(Proxy.Type.HTTP, hostname, port);
 	}
-	
-	public AbstractHTTPRestfulClient<T> setProxy(Proxy.Type type, String hostname, int port) {
+
+	public AbstractHTTPRestfulClient<R, S> setProxy(Proxy.Type type, String hostname, int port) {
 		this.mProxy = new Proxy(type, new InetSocketAddress(hostname, port));
 		return this;
 	}
-	
-	public AbstractHTTPRestfulClient<T> setProxy(final String username, final String password, final String hostname, final int port) {
+
+	public AbstractHTTPRestfulClient<R, S> setProxy(final String username, final String password, final String hostname,
+			final int port) {
 		Authenticator authenticator = new Authenticator() {
-	        public PasswordAuthentication getPasswordAuthentication() {
-	        	return (new PasswordAuthentication(username,(password + "").toCharArray()));
-	        }
-	    };
-	    Authenticator.setDefault(authenticator);
+			public PasswordAuthentication getPasswordAuthentication() {
+				return (new PasswordAuthentication(username, (password + "").toCharArray()));
+			}
+		};
+		Authenticator.setDefault(authenticator);
 		return setProxy(hostname, port);
 	}
-	
-	public AbstractHTTPRestfulClient<T> setProxy(Proxy.Type type, final String username, final String password, String hostname, int port) {
+
+	public AbstractHTTPRestfulClient<R, S> setProxy(Proxy.Type type, final String username, final String password,
+			String hostname, int port) {
 		Authenticator authenticator = new Authenticator() {
-	        public PasswordAuthentication getPasswordAuthentication() {
-	        	return (new PasswordAuthentication(username,(password + "").toCharArray()));
-	        }
-	    };
-	    Authenticator.setDefault(authenticator);
+			public PasswordAuthentication getPasswordAuthentication() {
+				return (new PasswordAuthentication(username, (password + "").toCharArray()));
+			}
+		};
+		Authenticator.setDefault(authenticator);
 		return setProxy(type, hostname, port);
 	}
-	
+
 	/**
 	 * @param url
 	 * @param httpMethod
@@ -194,7 +177,7 @@ public abstract class AbstractHTTPRestfulClient<T> {
 			uri = new URL(url);
 			if (this.mProxy == null)
 				connection = (HttpURLConnection) uri.openConnection();
-			else 
+			else
 				connection = (HttpURLConnection) uri.openConnection(mProxy);
 			connection.setRequestMethod(httpMethod.getName());
 			connection.setConnectTimeout(this.mConnectTimeout);
@@ -212,11 +195,11 @@ public abstract class AbstractHTTPRestfulClient<T> {
 	 * @param request
 	 * @return
 	 */
-	private Response<T> perform(final Request<T> request) {
+	private Response<S> perform(final Request<R, S> request) {
 
 		if (request == null)
 			throw new RuntimeException("You need to send a request data.");
-		Response<T> result = null;
+		Response<S> result = null;
 		final HttpURLConnection connection = newHttpConnection(request.getHttpMethod(), request.getUrl());
 		try {
 			final String parameters = request.getParameters();
@@ -238,14 +221,15 @@ public abstract class AbstractHTTPRestfulClient<T> {
 				// If exists body:
 				if (request.getBody() != null) {
 					DataOutputStream dataOutputStream = new DataOutputStream(connection.getOutputStream());
-					dataOutputStream.writeBytes(request.getBody().toString());
+					dataOutputStream.write(request.bodyToByteArray());
 					dataOutputStream.flush();
 					dataOutputStream.close();
 				}
 			}
 			// Basic HTTP Authentication
 			if (this.mBasicHttpAuthentication != null) {
-				connection.setRequestProperty(this.mBasicHttpAuthentication.getKey(), this.mBasicHttpAuthentication.getValue());
+				connection.setRequestProperty(this.mBasicHttpAuthentication.getKey(),
+						this.mBasicHttpAuthentication.getValue());
 			}
 			final Set<Property> properties = request.getProperties();
 			if (properties != null && properties.size() > 0) {
@@ -254,8 +238,7 @@ public abstract class AbstractHTTPRestfulClient<T> {
 				}
 			}
 			connection.connect();
-			final String response = inputStreamToString(connection.getInputStream());
-			result = request.parseResponse(connection.getResponseCode(), response);
+			result = request.parseResponse(connection.getResponseCode(), connection.getInputStream());
 			this.mResponseListener.onResponse(result == null ? null : result.getResult());
 		} catch (IOException e) {
 			try {
@@ -278,23 +261,32 @@ public abstract class AbstractHTTPRestfulClient<T> {
 	 * @param body
 	 * @param parameters
 	 */
-	public synchronized final void send(final HttpMethod httpMethod, final String url, final T body,
+	public synchronized final void send(final HttpMethod httpMethod, final String url, final R body,
 			final Parameter... parameters) {
-		final Request<T> request = createRequest(httpMethod, url, body, parameters);
-		send((Request<T>) request);
+		final Request<R, S> request = createRequest(httpMethod, url, body, parameters);
+		send((Request<R, S>) request);
 
 	}
 
 	/**
+	 * 
+	 * @param httpMethod
+	 * @param url
+	 * @param body
+	 * @param parameters
 	 * @return
 	 */
-	protected abstract Request<T> createRequest(final HttpMethod httpMethod, final String url, final T body,
+	protected abstract Request<R, S> createRequest(final HttpMethod httpMethod, final String url, final R body,
 			final Parameter... parameters);
-
-	public synchronized final void send(final Request<T> request) {
-		final Response<T> response = perform(request);
+	
+	/**
+	 * 
+	 * @param request
+	 */
+	public synchronized final void send(final Request<R, S> request) {
+		final Response<S> response = perform(request);
 		final HTTPStatusCode.StatusCode statusCode = (response == null ? null : response.getStatusCode());
-		final T result = (response == null ? null : response.getResult());
+		final S result = (response == null ? null : response.getResult());
 		this.mRequestFinishedListener.onRequestFinished(statusCode, result);
 	}
 
@@ -304,7 +296,7 @@ public abstract class AbstractHTTPRestfulClient<T> {
 	 * @param body
 	 * @param parameters
 	 */
-	public synchronized final void get(final String url, final T body, final Parameter... parameters) {
+	public synchronized final void get(final String url, final R body, final Parameter... parameters) {
 		this.send(HttpMethod.GET, url, body, parameters);
 	}
 
@@ -313,7 +305,7 @@ public abstract class AbstractHTTPRestfulClient<T> {
 	 * @param body
 	 * @param parameters
 	 */
-	public synchronized final void post(final String url, final T body, final Parameter... parameters) {
+	public synchronized final void post(final String url, final R body, final Parameter... parameters) {
 		this.send(HttpMethod.POST, url, body, parameters);
 	}
 
@@ -322,7 +314,7 @@ public abstract class AbstractHTTPRestfulClient<T> {
 	 * @param body
 	 * @param parameters
 	 */
-	public synchronized final void delete(final String url, final T body, final Parameter... parameters) {
+	public synchronized final void delete(final String url, final R body, final Parameter... parameters) {
 		this.send(HttpMethod.DELETE, url, body, parameters);
 	}
 
