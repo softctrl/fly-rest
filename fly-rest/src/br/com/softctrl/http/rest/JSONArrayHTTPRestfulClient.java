@@ -75,6 +75,7 @@ public final class JSONArrayHTTPRestfulClient extends AbstractHTTPRestfulClient<
 				}
 				return response;
 			}
+
 			@Override
 			public byte[] bodyToByteArray() {
 				return (getBody() + "").getBytes();

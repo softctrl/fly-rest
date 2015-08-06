@@ -46,8 +46,7 @@ import br.com.softctrl.http.rest.listener.ResponseListener;
 import br.com.softctrl.http.util.HTTPStatusCode;
 
 /**
- * [R]equest
- * Re[S]ponse
+ * [R]equest Re[S]ponse
  * 
  * @author carlostimoshenkorodrigueslopes@gmail.com
  */
@@ -185,7 +184,7 @@ public abstract class AbstractHTTPRestfulClient<R, S> {
 			connection.setRequestProperty(Constants.ACCEPT_ENCODING, this.mEncoding);
 			connection.setRequestProperty(Constants.CONTENT_TYPE, this.mContentType);
 		} catch (Exception e) {
-			e.printStackTrace();
+			throw new RuntimeException(e);
 		}
 		return connection;
 
@@ -278,7 +277,7 @@ public abstract class AbstractHTTPRestfulClient<R, S> {
 	 */
 	protected abstract Request<R, S> createRequest(final HttpMethod httpMethod, final String url, final R body,
 			final Parameter... parameters);
-	
+
 	/**
 	 * 
 	 * @param request
