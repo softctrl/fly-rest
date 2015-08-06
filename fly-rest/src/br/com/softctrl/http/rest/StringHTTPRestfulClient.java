@@ -1,6 +1,7 @@
 package br.com.softctrl.http.rest;
 
 import static br.com.softctrl.http.util.StreamUtils.inputStreamToString;
+
 import java.io.InputStream;
 
 import br.com.softctrl.http.rest.listener.RequestFinishedListener;

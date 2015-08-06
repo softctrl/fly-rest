@@ -6,7 +6,7 @@ package br.com.softctrl.http.util;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.nio.charset.Charset;
+import java.io.OutputStream;
 
 /*
 The MIT License (MIT)
@@ -37,13 +37,14 @@ SOFTWARE.
  * @author carlostimoshenkorodrigueslopes@gmail.com
  */
 public final class StreamUtils {
-	
+
 	private static final class Constants {
 		private static final String UTF_8 = "UTF-8";
 	}
-	
-	private StreamUtils() {}
-	
+
+	private StreamUtils() {
+	}
+
 	/**
 	 * 
 	 * @param inputStream
@@ -60,14 +61,13 @@ public final class StreamUtils {
 				}
 				return byteArrayOutputStream.toString(Constants.UTF_8);
 			} catch (IOException e) {
-				e.printStackTrace();
+				throw new RuntimeException(e);
 			}
 		}
 		return null;
 	}
-	
-	
-	public static final byte[] streamToByteArray(InputStream inputStream){
+
+	public static final byte[] streamToByteArray(InputStream inputStream) {
 		final ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
 		if (inputStream != null) {
 			final byte[] buffer = new byte[1024];
@@ -78,27 +78,26 @@ public final class StreamUtils {
 				}
 				return byteArrayOutputStream.toByteArray();
 			} catch (IOException e) {
-				e.printStackTrace();
+				throw new RuntimeException(e);
 			}
 		}
 		return null;
 	}
-/**
-		final ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-		if (inputStream != null) {
-			final byte[] buffer = new byte[1024];
-			int length = 0;
-			try {
-				while ((length = inputStream.read(buffer)) != -1) {
-					byteArrayOutputStream.write(buffer, 0, length);
-				}
-				return byteArrayOutputStream.toString();
-			} catch (IOException e) {
-				e.printStackTrace();
+
+	public static final void streamCopy(final InputStream in, final OutputStream out) {
+
+		if (in == null || out == null)
+			throw new IllegalArgumentException("You need to provide input and output streams.");
+		final byte[] buffer = new byte[8192];
+		int len = 0;
+		try {
+			while ((len = in.read(buffer)) != -1) {
+				out.write(buffer, 0, len);
+				out.flush();
 			}
+		} catch (IOException e) {
+			throw new RuntimeException(e);
 		}
-		byteArrayOutputStream.toString(Constants.UTF_8);
-		return null;
- */
+	}
 
 }

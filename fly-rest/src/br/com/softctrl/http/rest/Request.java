@@ -117,9 +117,10 @@ public abstract class Request<R, S> {
 	public R getBody() {
 		return mBody;
 	}
-	
+
 	/**
 	 * We need implement this method to get bytes from body.
+	 * 
 	 * @return
 	 */
 	public byte[] bodyToByteArray() {

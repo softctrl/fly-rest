@@ -43,7 +43,7 @@ public final class Parameter {
 
 	@Override
 	public boolean equals(Object o) {
-		return Objects.equals(this.mName, ((Parameter) o).mName);		
+		return Objects.equals(this.mName, ((Parameter) o).mName);
 	}
 
 	@Override
@@ -52,9 +52,8 @@ public final class Parameter {
 			return (new StringBuilder(encode(this.mName, AbstractHTTPRestfulClient.Constants.UTF_8))).append('=')
 					.append(encode(this.mValue, AbstractHTTPRestfulClient.Constants.UTF_8)).toString();
 		} catch (UnsupportedEncodingException e) {
-			e.printStackTrace();
+			throw new RuntimeException(e);
 		}
-		return String.format("%s=%s", this.mName, this.mValue);
 	}
 
 }

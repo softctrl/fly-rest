@@ -38,6 +38,6 @@ public interface ResponseErrorListener {
 	 * @param serverMessage
 	 * @param throwable
 	 */
-    void onResponseError(HTTPStatusCode.StatusCode statusCode, String serverMessage, Throwable throwable);
+	void onResponseError(HTTPStatusCode.StatusCode statusCode, String serverMessage, Throwable throwable);
 
 }

@@ -1,12 +1,13 @@
 package br.com.softctrl.http.rest;
 
+import static br.com.softctrl.http.util.StreamUtils.inputStreamToString;
+import static br.com.softctrl.http.util.StreamUtils.streamToByteArray;
+
 import java.io.InputStream;
 
 import br.com.softctrl.http.rest.listener.RequestFinishedListener;
 import br.com.softctrl.http.rest.listener.ResponseErrorListener;
 import br.com.softctrl.http.rest.listener.ResponseListener;
-import static br.com.softctrl.http.util.StreamUtils.inputStreamToString;
-import static br.com.softctrl.http.util.StreamUtils.streamToByteArray;
 
 /*
 The MIT License (MIT)
@@ -66,6 +67,7 @@ public final class UploadFileHTTPRestfulClient extends AbstractHTTPRestfulClient
 				String _result = inputStreamToString(result);
 				return new Response<String>(statusCode, _result);
 			}
+
 			@Override
 			public byte[] bodyToByteArray() {
 				return streamToByteArray(getBody());
