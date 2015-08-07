@@ -65,14 +65,12 @@ public final class JSONObjectHTTPRestfulClient extends AbstractHTTPRestfulClient
 		final Request<String, JSONObject> request = new Request<String, JSONObject>(httpMethod, url, body) {
 			@Override
 			public Response<JSONObject> parseResponse(int statusCode, InputStream result) {
-				Response<JSONObject> response = null;
 				try {
 					String _result = inputStreamToString(result);
-					response = new Response<JSONObject>(statusCode, new JSONObject(_result));
+					return new Response<JSONObject>(statusCode, new JSONObject(_result));
 				} catch (JSONException e) {
-					e.printStackTrace();
+					throw new RuntimeException(e);
 				}
-				return response;
 			}
 
 			@Override
