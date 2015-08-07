@@ -66,14 +66,12 @@ public final class JSONArrayHTTPRestfulClient extends AbstractHTTPRestfulClient<
 		final Request<String, JSONArray> request = new Request<String, JSONArray>(httpMethod, url, body) {
 			@Override
 			public Response<JSONArray> parseResponse(int statusCode, InputStream result) {
-				Response<JSONArray> response = null;
 				try {
-					String _result = inputStreamToString(result);
-					response = new Response<JSONArray>(statusCode, new JSONArray(_result));
+					String _result = inputStreamToString(result).replaceAll("(<pre>|</pre>)", ""); // TODO remover depois validacao <pre>
+					return new Response<JSONArray>(statusCode, new JSONArray(_result));
 				} catch (JSONException e) {
-					e.printStackTrace();
+					throw new RuntimeException(e);
 				}
-				return response;
 			}
 
 			@Override
@@ -88,19 +86,5 @@ public final class JSONArrayHTTPRestfulClient extends AbstractHTTPRestfulClient<
 		}
 		return request;
 	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * br.com.softctrl.http.rest.AbstractHTTPRestfulClient#createRequest(br.com.
-	 * softctrl.rest.HttpMethod, java.lang.String, java.lang.Object,
-	 * br.com.softctrl.http.rest.Parameter[])
-	 */
-	// @Override
-	// protected Request<JSONArray> createRequest(HttpMethod httpMethod, String
-	// url, JSONArray body,
-	// Parameter... parameters) {
-	// }
 
 }
