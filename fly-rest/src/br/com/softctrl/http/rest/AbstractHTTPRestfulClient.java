@@ -38,6 +38,8 @@ import java.net.InetSocketAddress;
 import java.net.PasswordAuthentication;
 import java.net.Proxy;
 import java.net.URL;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.Set;
 
 import br.com.softctrl.http.rest.listener.RequestFinishedListener;
@@ -46,7 +48,8 @@ import br.com.softctrl.http.rest.listener.ResponseListener;
 import br.com.softctrl.http.util.HTTPStatusCode;
 
 /**
- * [R]equest Re[S]ponse
+ * [R]equest 
+ * Re[S]ponse
  * 
  * @author carlostimoshenkorodrigueslopes@gmail.com
  */
@@ -55,7 +58,7 @@ public abstract class AbstractHTTPRestfulClient<R, S> {
 	private int mConnectTimeout = Constants.CONNECT_TIMEOUT;
 	private Property mBasicHttpAuthentication = null;
 	private int mReadTimeout = Constants.READ_TIMEOUT;
-	private String mEncoding = Constants.UTF_8;
+	private Charset mCharset = StandardCharsets.UTF_8;
 	private String mContentType = Constants.APPLICATION_JSON;
 
 	private ResponseListener<S> mResponseListener;
@@ -75,7 +78,18 @@ public abstract class AbstractHTTPRestfulClient<R, S> {
 		this.mResponseListener = responseListener;
 		this.mResponseErrorListener = responseErrorListener;
 		this.mRequestFinishedListener = requestFinishedListener;
+		this.validateListeners();
 	}
+	
+	/**
+	 * 
+	 */
+	private final void validateListeners() {
+		if (this.mResponseListener == null) throw new IllegalArgumentException("I need this ResponseListener.");
+		if (this.mResponseErrorListener == null) throw new IllegalArgumentException("I need this ResponseErrorListener.");
+		if (this.mRequestFinishedListener == null) throw new IllegalArgumentException("I need this RequestFinishedListener.");
+	}
+
 
 	/**
 	 * 
@@ -98,12 +112,12 @@ public abstract class AbstractHTTPRestfulClient<R, S> {
 	}
 
 	/**
-	 * @param encoding
-	 *            the encoding to set
+	 * 
+	 * @param charset
 	 * @return
 	 */
-	public AbstractHTTPRestfulClient<R, S> setEncoding(String encoding) {
-		this.mEncoding = encoding;
+	public AbstractHTTPRestfulClient<R, S> setCharset(Charset charset) {
+		this.mCharset = charset;
 		return this;
 	}
 
@@ -181,7 +195,7 @@ public abstract class AbstractHTTPRestfulClient<R, S> {
 			connection.setRequestMethod(httpMethod.getName());
 			connection.setConnectTimeout(this.mConnectTimeout);
 			connection.setReadTimeout(this.mReadTimeout);
-			connection.setRequestProperty(Constants.ACCEPT_ENCODING, this.mEncoding);
+			connection.setRequestProperty(Constants.ACCEPT_ENCODING, this.mCharset.name());
 			connection.setRequestProperty(Constants.CONTENT_TYPE, this.mContentType);
 		} catch (Exception e) {
 			throw new RuntimeException(e);
@@ -189,7 +203,7 @@ public abstract class AbstractHTTPRestfulClient<R, S> {
 		return connection;
 
 	}
-
+	
 	/**
 	 * @param request
 	 * @return
@@ -211,7 +225,7 @@ public abstract class AbstractHTTPRestfulClient<R, S> {
 				if (parameters != null) {
 					OutputStream outputStream = connection.getOutputStream();
 					BufferedWriter parametersWriter = new BufferedWriter(
-							new OutputStreamWriter(outputStream, Constants.UTF_8));
+							new OutputStreamWriter(outputStream, this.mCharset));
 					parametersWriter.write(parameters);
 					parametersWriter.flush();
 					parametersWriter.close();
@@ -288,7 +302,7 @@ public abstract class AbstractHTTPRestfulClient<R, S> {
 		final S result = (response == null ? null : response.getResult());
 		this.mRequestFinishedListener.onRequestFinished(statusCode, result);
 	}
-
+	
 	/**
 	 * 
 	 * @param url
@@ -323,7 +337,6 @@ public abstract class AbstractHTTPRestfulClient<R, S> {
 		public static final int READ_TIMEOUT = CONNECT_TIMEOUT;
 
 		public static final String ACCEPT_ENCODING = "Accept-Encoding";
-		public static final String UTF_8 = "UTF-8";
 		public static final String CONTENT_TYPE = "Content-Type";
 		public static final String APPLICATION_JSON = "application/json";
 

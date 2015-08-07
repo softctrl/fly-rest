@@ -28,6 +28,7 @@ SOFTWARE.
 import static java.net.URLEncoder.encode;
 
 import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
 
 /**
  * @author carlostimoshenkorodrigueslopes@gmail.com
@@ -49,8 +50,8 @@ public final class Parameter {
 	@Override
 	public String toString() {
 		try {
-			return (new StringBuilder(encode(this.mName, AbstractHTTPRestfulClient.Constants.UTF_8))).append('=')
-					.append(encode(this.mValue, AbstractHTTPRestfulClient.Constants.UTF_8)).toString();
+			return (new StringBuilder(encode(this.mName, StandardCharsets.UTF_8.name()))).append('=')
+					.append(encode(this.mValue, StandardCharsets.UTF_8.name())).toString();
 		} catch (UnsupportedEncodingException e) {
 			throw new RuntimeException(e);
 		}

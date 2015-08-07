@@ -28,6 +28,7 @@ SOFTWARE.
 import static java.net.URLEncoder.encode;
 
 import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
 
 import br.com.softctrl.util.Base64;
 
@@ -78,8 +79,8 @@ public final class Property {
 	@Override
 	public String toString() {
 		try {
-			return (new StringBuilder(encode(this.mKey, AbstractHTTPRestfulClient.Constants.UTF_8))).append(EQUALS)
-					.append(encode(this.mValue, AbstractHTTPRestfulClient.Constants.UTF_8)).toString();
+			return (new StringBuilder(encode(this.mKey, StandardCharsets.UTF_8.name()))).append(EQUALS)
+					.append(encode(this.mValue, StandardCharsets.UTF_8.name())).toString();
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
 		}
