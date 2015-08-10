@@ -1,6 +1,6 @@
 package br.com.softctrl.http.rest;
 
-import static br.com.softctrl.http.util.StreamUtils.inputStreamToString;
+import static br.com.softctrl.http.util.StreamUtils.streamToString;
 
 import java.io.InputStream;
 
@@ -67,7 +67,7 @@ public final class JSONArrayHTTPRestfulClient extends AbstractHTTPRestfulClient<
 			@Override
 			public Response<JSONArray> parseResponse(int statusCode, InputStream result) {
 				try {
-					String _result = inputStreamToString(result).replaceAll("(<pre>|</pre>)", ""); // TODO remover depois validacao <pre>
+					String _result = streamToString(result).replaceAll("(<pre>|</pre>)", ""); // TODO remover depois validacao <pre>
 					return new Response<JSONArray>(statusCode, new JSONArray(_result));
 				} catch (JSONException e) {
 					throw new RuntimeException(e);

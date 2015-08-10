@@ -50,7 +50,7 @@ public final class StreamUtils {
 	 * @param inputStream
 	 * @return
 	 */
-	public static final String inputStreamToString(InputStream inputStream) {
+	public static final String streamToString(InputStream inputStream) {
 		final ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
 		if (inputStream != null) {
 			final byte[] buffer = new byte[1024];

@@ -1,6 +1,6 @@
 package br.com.softctrl.http.rest;
 
-import static br.com.softctrl.http.util.StreamUtils.inputStreamToString;
+import static br.com.softctrl.http.util.StreamUtils.streamToString;
 
 /*
 The MIT License (MIT)
@@ -255,7 +255,7 @@ public abstract class AbstractHTTPRestfulClient<R, S> {
 			this.mResponseListener.onResponse(result == null ? null : result.getResult());
 		} catch (IOException e) {
 			try {
-				final String response = inputStreamToString(connection.getErrorStream());
+				final String response = streamToString(connection.getErrorStream());
 				final HTTPStatusCode.StatusCode statusCode = HTTPStatusCode
 						.resolveStatusCode(connection.getResponseCode());
 				this.mResponseErrorListener.onResponseError(statusCode, response, e);

@@ -1,6 +1,6 @@
 package br.com.softctrl.http.rest;
 
-import static br.com.softctrl.http.util.StreamUtils.inputStreamToString;
+import static br.com.softctrl.http.util.StreamUtils.streamToString;
 
 import java.io.InputStream;
 
@@ -61,7 +61,7 @@ public final class StringHTTPRestfulClient extends AbstractHTTPRestfulClient<Str
 		final Request<String, String> request = new Request<String, String>(httpMethod, url, body) {
 			@Override
 			public Response<String> parseResponse(int statusCode, InputStream result) {
-				return new Response<String>(statusCode, inputStreamToString(result));
+				return new Response<String>(statusCode, streamToString(result));
 			}
 
 			@Override

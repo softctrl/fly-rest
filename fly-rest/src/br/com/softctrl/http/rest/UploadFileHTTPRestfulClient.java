@@ -1,6 +1,6 @@
 package br.com.softctrl.http.rest;
 
-import static br.com.softctrl.http.util.StreamUtils.inputStreamToString;
+import static br.com.softctrl.http.util.StreamUtils.streamToString;
 import static br.com.softctrl.http.util.StreamUtils.streamToByteArray;
 
 import java.io.InputStream;
@@ -64,7 +64,7 @@ public final class UploadFileHTTPRestfulClient extends AbstractHTTPRestfulClient
 		final Request<InputStream, String> request = new Request<InputStream, String>(httpMethod, url, body) {
 			@Override
 			public Response<String> parseResponse(int statusCode, InputStream result) {
-				String _result = inputStreamToString(result);
+				String _result = streamToString(result);
 				return new Response<String>(statusCode, _result);
 			}
 

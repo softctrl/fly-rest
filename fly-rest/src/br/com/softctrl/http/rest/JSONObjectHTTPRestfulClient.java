@@ -1,6 +1,6 @@
 package br.com.softctrl.http.rest;
 
-import static br.com.softctrl.http.util.StreamUtils.inputStreamToString;
+import static br.com.softctrl.http.util.StreamUtils.streamToString;
 
 import java.io.InputStream;
 
@@ -66,7 +66,7 @@ public final class JSONObjectHTTPRestfulClient extends AbstractHTTPRestfulClient
 			@Override
 			public Response<JSONObject> parseResponse(int statusCode, InputStream result) {
 				try {
-					String _result = inputStreamToString(result);
+					String _result = streamToString(result);
 					return new Response<JSONObject>(statusCode, new JSONObject(_result));
 				} catch (JSONException e) {
 					throw new RuntimeException(e);
