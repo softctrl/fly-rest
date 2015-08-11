@@ -36,7 +36,7 @@ SOFTWARE.
 /**
  * @author carlostimoshenkorodrigueslopes@gmail.com
  */
-public final class StringHTTPRestfulClient extends AbstractHTTPRestfulClient<String, String> {
+public class StringHTTPRestfulClient extends AbstractHTTPRestfulClient<String, String> {
 
 	/**
 	 * @param responseListener

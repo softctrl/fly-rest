@@ -34,7 +34,7 @@ SOFTWARE.
 /**
  * @author carlostimoshenkorodrigueslopes@gmail.com
  */
-public final class DownloadFileHTTPRestfulClient extends AbstractHTTPRestfulClient<String, InputStream> {
+public class DownloadFileHTTPRestfulClient extends AbstractHTTPRestfulClient<String, InputStream> {
 
 	/**
 	 * @param responseListener

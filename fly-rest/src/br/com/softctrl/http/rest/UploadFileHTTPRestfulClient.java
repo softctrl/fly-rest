@@ -37,7 +37,7 @@ SOFTWARE.
 /**
  * @author carlostimoshenkorodrigueslopes@gmail.com
  */
-public final class UploadFileHTTPRestfulClient extends AbstractHTTPRestfulClient<InputStream, String> {
+public class UploadFileHTTPRestfulClient extends AbstractHTTPRestfulClient<InputStream, String> {
 
 	/**
 	 * @param responseListener

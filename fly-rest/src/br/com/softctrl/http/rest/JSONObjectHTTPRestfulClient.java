@@ -39,7 +39,7 @@ SOFTWARE.
 /**
  * @author carlostimoshenkorodrigueslopes@gmail.com
  */
-public final class JSONObjectHTTPRestfulClient extends AbstractHTTPRestfulClient<String, JSONObject> {
+public class JSONObjectHTTPRestfulClient extends AbstractHTTPRestfulClient<String, JSONObject> {
 
 	/**
 	 * @param responseListener
