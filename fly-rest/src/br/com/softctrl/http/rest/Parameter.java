@@ -1,5 +1,11 @@
 package br.com.softctrl.http.rest;
 
+import static java.net.URLEncoder.encode;
+
+import java.io.UnsupportedEncodingException;
+import static br.com.softctrl.http.util.Constants.UTF_8;
+
+
 /*
 The MIT License (MIT)
 
@@ -24,12 +30,6 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
-
-import static java.net.URLEncoder.encode;
-
-import java.io.UnsupportedEncodingException;
-import java.nio.charset.StandardCharsets;
-
 /**
  * @author carlostimoshenkorodrigueslopes@gmail.com
  */
@@ -50,8 +50,8 @@ public final class Parameter {
 	@Override
 	public String toString() {
 		try {
-			return (new StringBuilder(encode(this.mName, StandardCharsets.UTF_8.name()))).append('=')
-					.append(encode(this.mValue, StandardCharsets.UTF_8.name())).toString();
+			return (new StringBuilder(encode(this.mName, UTF_8.name()))).append('=')
+					.append(encode(this.mValue, UTF_8.name())).toString();
 		} catch (UnsupportedEncodingException e) {
 			throw new RuntimeException(e);
 		}

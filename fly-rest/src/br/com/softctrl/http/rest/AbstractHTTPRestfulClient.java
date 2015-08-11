@@ -39,7 +39,7 @@ import java.net.PasswordAuthentication;
 import java.net.Proxy;
 import java.net.URL;
 import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
+import static br.com.softctrl.http.util.Constants.*;
 import java.util.Set;
 
 import br.com.softctrl.http.rest.listener.RequestFinishedListener;
@@ -48,18 +48,18 @@ import br.com.softctrl.http.rest.listener.ResponseListener;
 import br.com.softctrl.http.util.HTTPStatusCode;
 
 /**
- * [R]equest 
+ * [R]equest
  * Re[S]ponse
  * 
  * @author carlostimoshenkorodrigueslopes@gmail.com
  */
 public abstract class AbstractHTTPRestfulClient<R, S> {
 
-	private int mConnectTimeout = Constants.CONNECT_TIMEOUT;
+	private int mConnectTimeout = CONNECT_TIMEOUT;
 	private Property mBasicHttpAuthentication = null;
-	private int mReadTimeout = Constants.READ_TIMEOUT;
-	private Charset mCharset = StandardCharsets.UTF_8;
-	private String mContentType = Constants.APPLICATION_JSON;
+	private int mReadTimeout = READ_TIMEOUT;
+	private Charset mCharset = UTF_8;
+	private String mContentType = APPLICATION_JSON;
 
 	private ResponseListener<S> mResponseListener;
 	private ResponseErrorListener mResponseErrorListener;
@@ -80,16 +80,18 @@ public abstract class AbstractHTTPRestfulClient<R, S> {
 		this.mRequestFinishedListener = requestFinishedListener;
 		this.validateListeners();
 	}
-	
+
 	/**
 	 * 
 	 */
 	private final void validateListeners() {
-		if (this.mResponseListener == null) throw new IllegalArgumentException("I need this ResponseListener.");
-		if (this.mResponseErrorListener == null) throw new IllegalArgumentException("I need this ResponseErrorListener.");
-		if (this.mRequestFinishedListener == null) throw new IllegalArgumentException("I need this RequestFinishedListener.");
+		if (this.mResponseListener == null)
+			throw new IllegalArgumentException("I need this ResponseListener.");
+		if (this.mResponseErrorListener == null)
+			throw new IllegalArgumentException("I need this ResponseErrorListener.");
+		if (this.mRequestFinishedListener == null)
+			throw new IllegalArgumentException("I need this RequestFinishedListener.");
 	}
-
 
 	/**
 	 * 
@@ -195,15 +197,15 @@ public abstract class AbstractHTTPRestfulClient<R, S> {
 			connection.setRequestMethod(httpMethod.getName());
 			connection.setConnectTimeout(this.mConnectTimeout);
 			connection.setReadTimeout(this.mReadTimeout);
-			connection.setRequestProperty(Constants.ACCEPT_ENCODING, this.mCharset.name());
-			connection.setRequestProperty(Constants.CONTENT_TYPE, this.mContentType);
+			connection.setRequestProperty(ACCEPT_ENCODING, this.mCharset.name());
+			connection.setRequestProperty(CONTENT_TYPE, this.mContentType);
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
 		return connection;
 
 	}
-	
+
 	/**
 	 * @param request
 	 * @return
@@ -302,7 +304,7 @@ public abstract class AbstractHTTPRestfulClient<R, S> {
 		final S result = (response == null ? null : response.getResult());
 		this.mRequestFinishedListener.onRequestFinished(statusCode, result);
 	}
-	
+
 	/**
 	 * 
 	 * @param url
@@ -331,15 +333,5 @@ public abstract class AbstractHTTPRestfulClient<R, S> {
 		this.send(HttpMethod.DELETE, url, body, parameters);
 	}
 
-	public static final class Constants {
-
-		public static final int CONNECT_TIMEOUT = 5000; // 5 seconds
-		public static final int READ_TIMEOUT = CONNECT_TIMEOUT;
-
-		public static final String ACCEPT_ENCODING = "Accept-Encoding";
-		public static final String CONTENT_TYPE = "Content-Type";
-		public static final String APPLICATION_JSON = "application/json";
-
-	}
 
 }

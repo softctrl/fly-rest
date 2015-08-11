@@ -7,6 +7,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import static br.com.softctrl.http.util.Constants.UTF_8;
 
 /*
 The MIT License (MIT)
@@ -38,10 +39,6 @@ SOFTWARE.
  */
 public final class StreamUtils {
 
-	private static final class Constants {
-		private static final String UTF_8 = "UTF-8";
-	}
-
 	private StreamUtils() {
 	}
 
@@ -59,7 +56,7 @@ public final class StreamUtils {
 				while ((length = inputStream.read(buffer)) != -1) {
 					byteArrayOutputStream.write(buffer, 0, length);
 				}
-				return byteArrayOutputStream.toString(Constants.UTF_8);
+				return byteArrayOutputStream.toString(UTF_8.name());
 			} catch (IOException e) {
 				throw new RuntimeException(e);
 			}
