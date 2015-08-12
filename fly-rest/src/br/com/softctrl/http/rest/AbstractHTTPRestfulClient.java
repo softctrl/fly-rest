@@ -46,6 +46,7 @@ import br.com.softctrl.http.rest.listener.RequestFinishedListener;
 import br.com.softctrl.http.rest.listener.ResponseErrorListener;
 import br.com.softctrl.http.rest.listener.ResponseListener;
 import br.com.softctrl.http.util.HTTPStatusCode;
+import br.com.softctrl.http.util.HTTPStatusCode.StatusCode;
 
 /**
  * [R]equest
@@ -54,6 +55,8 @@ import br.com.softctrl.http.util.HTTPStatusCode;
  * @author carlostimoshenkorodrigueslopes@gmail.com
  */
 public abstract class AbstractHTTPRestfulClient<R, S> {
+	
+	private static final String TAG = AbstractHTTPRestfulClient.class.getSimpleName();
 
 	private int mConnectTimeout = CONNECT_TIMEOUT;
 	private Property mBasicHttpAuthentication = null;
@@ -66,6 +69,29 @@ public abstract class AbstractHTTPRestfulClient<R, S> {
 	private RequestFinishedListener<S> mRequestFinishedListener;
 
 	private Proxy mProxy = null;
+
+	/**
+	 * Default constructor with basic listeners.
+	 */
+	public AbstractHTTPRestfulClient() {
+		this(new ResponseListener<S>() {
+			@Override
+			public void onResponse(S response) {
+				System.out.format("%s - %s", TAG, response + "");
+			}
+		}, new ResponseErrorListener() {
+			@Override
+			public void onResponseError(StatusCode statusCode, String serverMessage, Throwable throwable) {
+				System.out.format("%s\nMessage: %s\nStatus code: %s", TAG, serverMessage, statusCode);
+				throwable.printStackTrace();
+			}
+		}, new RequestFinishedListener<S>() {
+			@Override
+			public void onRequestFinished(StatusCode statusCode, S response) {
+				System.out.format("%s\nStatus code: %s\nResponse: ", TAG, statusCode, response);
+			}
+		});
+	}
 
 	/**
 	 * @param responseListener
