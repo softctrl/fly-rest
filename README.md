@@ -3,10 +3,11 @@ Restfull Library to use on Android mobile projects
 
 To use, just make those imports:
 ```java
+import br.com.softctrl.http.rest.StringHTTPRestfulClient;
+import br.com.softctrl.http.rest.listener.RequestFinishedListener;
+import br.com.softctrl.http.rest.listener.ResponseErrorListener;
+import br.com.softctrl.http.rest.listener.ResponseListener;
 import br.com.softctrl.http.util.HTTPStatusCode.StatusCode;
-import br.com.softctrl.rest.listener.RequestFinishedListener;
-import br.com.softctrl.rest.listener.ResponseErrorListener;
-import br.com.softctrl.rest.listener.ResponseListener;
 ```
 And create this listeners:
 ```java
