@@ -1,10 +1,10 @@
 package br.com.softctrl.rest;
 
+import br.com.softctrl.http.rest.StringHTTPRestfulClient;
+import br.com.softctrl.http.rest.listener.RequestFinishedListener;
+import br.com.softctrl.http.rest.listener.ResponseErrorListener;
+import br.com.softctrl.http.rest.listener.ResponseListener;
 import br.com.softctrl.http.util.HTTPStatusCode.StatusCode;
-import br.com.softctrl.rest.listener.RequestFinishedListener;
-import br.com.softctrl.rest.listener.ResponseErrorListener;
-import br.com.softctrl.rest.listener.ResponseListener;
-
 /*
 The MIT License (MIT)
 
