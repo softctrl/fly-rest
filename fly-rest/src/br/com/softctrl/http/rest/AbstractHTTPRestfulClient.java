@@ -1,6 +1,32 @@
 package br.com.softctrl.http.rest;
 
+import static br.com.softctrl.http.util.Constants.ACCEPT_ENCODING;
+import static br.com.softctrl.http.util.Constants.APPLICATION_JSON;
+import static br.com.softctrl.http.util.Constants.CONNECT_TIMEOUT;
+import static br.com.softctrl.http.util.Constants.CONTENT_TYPE;
+import static br.com.softctrl.http.util.Constants.READ_TIMEOUT;
+import static br.com.softctrl.http.util.Constants.UTF_8;
 import static br.com.softctrl.http.util.StreamUtils.streamToString;
+
+import java.io.BufferedWriter;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.net.Authenticator;
+import java.net.HttpURLConnection;
+import java.net.InetSocketAddress;
+import java.net.PasswordAuthentication;
+import java.net.Proxy;
+import java.net.URL;
+import java.nio.charset.Charset;
+import java.util.Set;
+
+import br.com.softctrl.http.rest.listener.RequestFinishedListener;
+import br.com.softctrl.http.rest.listener.ResponseErrorListener;
+import br.com.softctrl.http.rest.listener.ResponseListener;
+import br.com.softctrl.http.util.HTTPStatusCode;
+import br.com.softctrl.http.util.HTTPStatusCode.StatusCode;
 
 /*
 The MIT License (MIT)
@@ -26,27 +52,6 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
-
-import java.io.BufferedWriter;
-import java.io.DataOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.net.Authenticator;
-import java.net.HttpURLConnection;
-import java.net.InetSocketAddress;
-import java.net.PasswordAuthentication;
-import java.net.Proxy;
-import java.net.URL;
-import java.nio.charset.Charset;
-import static br.com.softctrl.http.util.Constants.*;
-import java.util.Set;
-
-import br.com.softctrl.http.rest.listener.RequestFinishedListener;
-import br.com.softctrl.http.rest.listener.ResponseErrorListener;
-import br.com.softctrl.http.rest.listener.ResponseListener;
-import br.com.softctrl.http.util.HTTPStatusCode;
-import br.com.softctrl.http.util.HTTPStatusCode.StatusCode;
 
 /**
  * [R]equest
@@ -231,7 +236,7 @@ public abstract class AbstractHTTPRestfulClient<R, S> {
 		return connection;
 
 	}
-
+	
 	/**
 	 * @param request
 	 * @return
@@ -239,7 +244,7 @@ public abstract class AbstractHTTPRestfulClient<R, S> {
 	private Response<S> perform(final Request<R, S> request) {
 
 		if (request == null)
-			throw new RuntimeException("You need to send a request data.");
+			throw new IllegalArgumentException("You need to send a request data.");
 		Response<S> result = null;
 		final HttpURLConnection connection = newHttpConnection(request.getHttpMethod(), request.getUrl());
 		try {
@@ -247,6 +252,21 @@ public abstract class AbstractHTTPRestfulClient<R, S> {
 			connection.setDoInput(true);
 			final boolean isPOST = HttpMethod.POST.equals(request.getHttpMethod());
 			connection.setDoOutput(isPOST);
+			
+			// Basic HTTP Authentication
+			if (this.mBasicHttpAuthentication != null) {
+				connection.setRequestProperty(this.mBasicHttpAuthentication.getKey(),
+						this.mBasicHttpAuthentication.getValue());
+			}
+			
+			// Request properties
+			final Set<Property> properties = request.getProperties();
+			if (properties != null && properties.size() > 0) {
+				for (Property property : properties) {
+					connection.setRequestProperty(property.getKey(), property.getValue());
+				}
+			}
+			
 			// If is a POST:
 			if (isPOST) {
 				// If exists parameters:
@@ -265,17 +285,6 @@ public abstract class AbstractHTTPRestfulClient<R, S> {
 					dataOutputStream.write(request.bodyToByteArray());
 					dataOutputStream.flush();
 					dataOutputStream.close();
-				}
-			}
-			// Basic HTTP Authentication
-			if (this.mBasicHttpAuthentication != null) {
-				connection.setRequestProperty(this.mBasicHttpAuthentication.getKey(),
-						this.mBasicHttpAuthentication.getValue());
-			}
-			final Set<Property> properties = request.getProperties();
-			if (properties != null && properties.size() > 0) {
-				for (Property property : properties) {
-					connection.setRequestProperty(property.getKey(), property.getValue());
 				}
 			}
 			connection.connect();
