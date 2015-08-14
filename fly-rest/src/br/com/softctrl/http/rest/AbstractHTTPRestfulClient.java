@@ -343,6 +343,15 @@ public abstract class AbstractHTTPRestfulClient<R, S> {
 	/**
 	 * 
 	 * @param url
+	 * @param parameters
+	 */
+	public synchronized final void get(final String url, final Parameter... parameters) {
+		this.send(HttpMethod.GET, url, null, parameters);
+	}
+
+	/**
+	 * 
+	 * @param url
 	 * @param body
 	 * @param parameters
 	 */
