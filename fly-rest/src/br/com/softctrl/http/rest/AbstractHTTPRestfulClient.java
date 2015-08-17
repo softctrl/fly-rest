@@ -117,11 +117,11 @@ public abstract class AbstractHTTPRestfulClient<R, S> {
 	 */
 	private final void validateListeners() {
 		if (this.mResponseListener == null)
-			throw new IllegalArgumentException("I need this ResponseListener.");
+			throw new IllegalArgumentException("You need to provide a valid ResponseListener.");
 		if (this.mResponseErrorListener == null)
-			throw new IllegalArgumentException("I need this ResponseErrorListener.");
+			throw new IllegalArgumentException("You need to provide a valid ResponseErrorListener.");
 		if (this.mRequestFinishedListener == null)
-			throw new IllegalArgumentException("I need this RequestFinishedListener.");
+			throw new IllegalArgumentException("You need to provide a valid RequestFinishedListener.");
 	}
 
 	/**
