@@ -1,7 +1,6 @@
-package br.com.softctrl.http.rest;
+package br.com.softctrl.net.rest.listener;
 
-import br.com.softctrl.http.util.HTTPStatusCode;
-import br.com.softctrl.http.util.HTTPStatusCode.StatusCode;
+import br.com.softctrl.net.util.HTTPStatusCode;
 
 /*
 The MIT License (MIT)
@@ -31,26 +30,14 @@ SOFTWARE.
 /**
  * @author carlostimoshenkorodrigueslopes@gmail.com
  */
-public class Response<T> {
+public interface ResponseErrorListener {
 
-	private StatusCode mStatusCode;
-	private T mResult;
+	/**
+	 * 
+	 * @param statusCode
+	 * @param serverMessage
+	 * @param throwable
+	 */
+	void onResponseError(HTTPStatusCode.StatusCode statusCode, String serverMessage, Throwable throwable);
 
-	public Response(int statusCode, T result) {
-		this.mStatusCode = HTTPStatusCode.resolveStatusCode(statusCode);
-		this.mResult = result;
-	}
-
-	public StatusCode getStatusCode() {
-		return mStatusCode;
-	}
-
-	public T getResult() {
-		return mResult;
-	}
-
-	@Override
-	public String toString() {
-		return String.format("##Status Code: %d\n##Response\n\n%s", this.getStatusCode(), this.getResult());
-	}
 }

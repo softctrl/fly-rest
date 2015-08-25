@@ -1,4 +1,10 @@
-package br.com.softctrl.http.rest;
+package br.com.softctrl.net.rest;
+
+import static br.com.softctrl.net.util.Constants.UTF_8;
+import static java.net.URLEncoder.encode;
+
+import java.io.UnsupportedEncodingException;
+
 
 /*
 The MIT License (MIT)
@@ -24,21 +30,31 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
-
 /**
  * @author carlostimoshenkorodrigueslopes@gmail.com
  */
-public enum HttpMethod {
-
-	POST("POST"), GET("GET"), DELETE("DELETE"), PUT("PUT"), OPTIONS("OPTIONS"), HEAD("HEAD"), TRACE("TRACE");
-
+public final class Parameter {
 	private String mName;
+	private String mValue;
 
-	private HttpMethod(String name) {
+	public Parameter(String name, String value) {
 		this.mName = name;
+		this.mValue = value;
 	}
 
-	public String getName() {
-		return mName;
+	@Override
+	public boolean equals(Object o) {
+		return Objects.equals(this.mName, ((Parameter) o).mName);
 	}
+
+	@Override
+	public String toString() {
+		try {
+			return (new StringBuilder(encode(this.mName, UTF_8.name()))).append('=')
+					.append(encode(this.mValue, UTF_8.name())).toString();
+		} catch (UnsupportedEncodingException e) {
+			throw new RuntimeException(e);
+		}
+	}
+
 }

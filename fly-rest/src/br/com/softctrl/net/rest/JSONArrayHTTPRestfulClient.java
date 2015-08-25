@@ -1,15 +1,15 @@
-package br.com.softctrl.http.rest;
+package br.com.softctrl.net.rest;
 
-import static br.com.softctrl.http.util.StreamUtils.streamToString;
+import static br.com.softctrl.net.util.StreamUtils.streamToString;
 
 import java.io.InputStream;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 
-import br.com.softctrl.http.rest.listener.RequestFinishedListener;
-import br.com.softctrl.http.rest.listener.ResponseErrorListener;
-import br.com.softctrl.http.rest.listener.ResponseListener;
+import br.com.softctrl.net.rest.listener.RequestFinishedListener;
+import br.com.softctrl.net.rest.listener.ResponseErrorListener;
+import br.com.softctrl.net.rest.listener.ResponseListener;
 
 /*
 The MIT License (MIT)

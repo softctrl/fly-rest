@@ -14,13 +14,12 @@
  * limitations under the License.
  */
 
-package br.com.softctrl.util;
+package br.com.softctrl.net.util;
 
 import java.io.UnsupportedEncodingException;
 
 /**
- * https://github.com/android/platform_frameworks_base/blob/master/core/java/
- * android/util/Base64.java Utilities for encoding and decoding the Base64
+ * https://github.com/android/platform_frameworks_base/blob/master/core/java/android/util/Base64.java Utilities for encoding and decoding the Base64
  * representation of binary data. See RFCs
  * <a href="http://www.ietf.org/rfc/rfc2045.txt">2045</a> and
  * <a href="http://www.ietf.org/rfc/rfc3548.txt">3548</a>.

@@ -1,4 +1,6 @@
-package br.com.softctrl.http.rest;
+package br.com.softctrl.net.rest;
+
+import static br.com.softctrl.net.util.Constants.UTF_8;
 
 /*
 The MIT License (MIT)
@@ -28,9 +30,8 @@ SOFTWARE.
 import static java.net.URLEncoder.encode;
 
 import java.io.UnsupportedEncodingException;
-import static br.com.softctrl.http.util.Constants.UTF_8;
 
-import br.com.softctrl.util.Base64;
+import br.com.softctrl.net.util.Base64;
 
 /**
  * @author carlostimoshenkorodrigueslopes@gmail.com

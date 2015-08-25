@@ -1,15 +1,13 @@
-package br.com.softctrl.http.rest;
+package br.com.softctrl.net.rest;
 
-import static br.com.softctrl.http.util.StreamUtils.streamToString;
+import static br.com.softctrl.net.util.StreamUtils.streamToByteArray;
+import static br.com.softctrl.net.util.StreamUtils.streamToString;
 
 import java.io.InputStream;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import br.com.softctrl.http.rest.listener.RequestFinishedListener;
-import br.com.softctrl.http.rest.listener.ResponseErrorListener;
-import br.com.softctrl.http.rest.listener.ResponseListener;
+import br.com.softctrl.net.rest.listener.RequestFinishedListener;
+import br.com.softctrl.net.rest.listener.ResponseErrorListener;
+import br.com.softctrl.net.rest.listener.ResponseListener;
 
 /*
 The MIT License (MIT)
@@ -39,15 +37,15 @@ SOFTWARE.
 /**
  * @author carlostimoshenkorodrigueslopes@gmail.com
  */
-public class JSONObjectHTTPRestfulClient extends AbstractHTTPRestfulClient<String, JSONObject> {
+public class UploadFileHTTPRestfulClient extends AbstractHTTPRestfulClient<InputStream, String> {
 
 	/**
 	 * @param responseListener
 	 * @param responseErrorListener
 	 * @param requestFinishedListener
 	 */
-	public JSONObjectHTTPRestfulClient(ResponseListener<JSONObject> responseListener,
-			ResponseErrorListener responseErrorListener, RequestFinishedListener<JSONObject> requestFinishedListener) {
+	public UploadFileHTTPRestfulClient(ResponseListener<String> responseListener,
+			ResponseErrorListener responseErrorListener, RequestFinishedListener<String> requestFinishedListener) {
 		super(responseListener, responseErrorListener, requestFinishedListener);
 	}
 
@@ -60,22 +58,19 @@ public class JSONObjectHTTPRestfulClient extends AbstractHTTPRestfulClient<Strin
 	 * br.com.softctrl.http.rest.Parameter[])
 	 */
 	@Override
-	protected Request<String, JSONObject> createRequest(HttpMethod httpMethod, String url, String body,
+	protected Request<InputStream, String> createRequest(HttpMethod httpMethod, String url, InputStream body,
 			Parameter... parameters) {
-		final Request<String, JSONObject> request = new Request<String, JSONObject>(httpMethod, url, body) {
+
+		final Request<InputStream, String> request = new Request<InputStream, String>(httpMethod, url, body) {
 			@Override
-			public Response<JSONObject> parseResponse(int statusCode, InputStream result) {
-				try {
-					String _result = streamToString(result);
-					return new Response<JSONObject>(statusCode, new JSONObject(_result));
-				} catch (JSONException e) {
-					throw new RuntimeException(e);
-				}
+			public Response<String> parseResponse(int statusCode, InputStream result) {
+				String _result = streamToString(result);
+				return new Response<String>(statusCode, _result);
 			}
 
 			@Override
 			public byte[] bodyToByteArray() {
-				return (getBody() + "").getBytes();
+				return streamToByteArray(getBody());
 			}
 		};
 		if (parameters != null && parameters.length > 0) {

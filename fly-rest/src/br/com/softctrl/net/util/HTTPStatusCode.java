@@ -1,4 +1,4 @@
-package br.com.softctrl.http.util;
+package br.com.softctrl.net.util;
 
 import java.util.concurrent.ConcurrentHashMap;
 

@@ -1,12 +1,15 @@
-package br.com.softctrl.http.rest;
+package br.com.softctrl.net.rest;
 
-import static br.com.softctrl.http.util.StreamUtils.streamToString;
+import static br.com.softctrl.net.util.StreamUtils.streamToString;
 
 import java.io.InputStream;
 
-import br.com.softctrl.http.rest.listener.RequestFinishedListener;
-import br.com.softctrl.http.rest.listener.ResponseErrorListener;
-import br.com.softctrl.http.rest.listener.ResponseListener;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import br.com.softctrl.net.rest.listener.RequestFinishedListener;
+import br.com.softctrl.net.rest.listener.ResponseErrorListener;
+import br.com.softctrl.net.rest.listener.ResponseListener;
 
 /*
 The MIT License (MIT)
@@ -36,32 +39,38 @@ SOFTWARE.
 /**
  * @author carlostimoshenkorodrigueslopes@gmail.com
  */
-public class StringHTTPRestfulClient extends AbstractHTTPRestfulClient<String, String> {
+public class JSONObjectHTTPRestfulClient extends AbstractHTTPRestfulClient<String, JSONObject> {
 
 	/**
 	 * @param responseListener
 	 * @param responseErrorListener
 	 * @param requestFinishedListener
 	 */
-	public StringHTTPRestfulClient(ResponseListener<String> responseListener,
-			ResponseErrorListener responseErrorListener, RequestFinishedListener<String> requestFinishedListener) {
+	public JSONObjectHTTPRestfulClient(ResponseListener<JSONObject> responseListener,
+			ResponseErrorListener responseErrorListener, RequestFinishedListener<JSONObject> requestFinishedListener) {
 		super(responseListener, responseErrorListener, requestFinishedListener);
 	}
 
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see br.com.softctrl.http.rest.BasicHTTPRestClient#createRequest(br.com.
-	 * softctrl. rest.HttpMethod, java.lang.String, java.lang.Object,
+	 * @see
+	 * br.com.softctrl.http.rest.AbstractHTTPRestfulClient#createRequest(br.com.
+	 * softctrl.http.rest.HttpMethod, java.lang.String, java.lang.Object,
 	 * br.com.softctrl.http.rest.Parameter[])
 	 */
 	@Override
-	protected Request<String, String> createRequest(HttpMethod httpMethod, String url, String body,
+	protected Request<String, JSONObject> createRequest(HttpMethod httpMethod, String url, String body,
 			Parameter... parameters) {
-		final Request<String, String> request = new Request<String, String>(httpMethod, url, body) {
+		final Request<String, JSONObject> request = new Request<String, JSONObject>(httpMethod, url, body) {
 			@Override
-			public Response<String> parseResponse(int statusCode, InputStream result) {
-				return new Response<String>(statusCode, streamToString(result));
+			public Response<JSONObject> parseResponse(int statusCode, InputStream result) {
+				try {
+					String _result = streamToString(result);
+					return new Response<JSONObject>(statusCode, new JSONObject(_result));
+				} catch (JSONException e) {
+					throw new RuntimeException(e);
+				}
 			}
 
 			@Override

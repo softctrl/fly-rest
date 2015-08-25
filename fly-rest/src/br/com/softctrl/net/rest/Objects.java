@@ -1,4 +1,4 @@
-package br.com.softctrl.http.rest;
+package br.com.softctrl.net.rest;
 
 /*
 The MIT License (MIT)

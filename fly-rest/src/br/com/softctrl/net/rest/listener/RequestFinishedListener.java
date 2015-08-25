@@ -1,10 +1,6 @@
-package br.com.softctrl.http.rest;
+package br.com.softctrl.net.rest.listener;
 
-import static java.net.URLEncoder.encode;
-
-import java.io.UnsupportedEncodingException;
-import static br.com.softctrl.http.util.Constants.UTF_8;
-
+import br.com.softctrl.net.util.HTTPStatusCode;
 
 /*
 The MIT License (MIT)
@@ -30,31 +26,17 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
+
 /**
  * @author carlostimoshenkorodrigueslopes@gmail.com
  */
-public final class Parameter {
-	private String mName;
-	private String mValue;
+public interface RequestFinishedListener<T> {
 
-	public Parameter(String name, String value) {
-		this.mName = name;
-		this.mValue = value;
-	}
-
-	@Override
-	public boolean equals(Object o) {
-		return Objects.equals(this.mName, ((Parameter) o).mName);
-	}
-
-	@Override
-	public String toString() {
-		try {
-			return (new StringBuilder(encode(this.mName, UTF_8.name()))).append('=')
-					.append(encode(this.mValue, UTF_8.name())).toString();
-		} catch (UnsupportedEncodingException e) {
-			throw new RuntimeException(e);
-		}
-	}
+	/**
+	 * 
+	 * @param statusCode
+	 * @param response
+	 */
+	void onRequestFinished(HTTPStatusCode.StatusCode statusCode, T response);
 
 }

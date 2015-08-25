@@ -1,9 +1,7 @@
-/**
- * 
- */
-package br.com.softctrl.http.util;
+package br.com.softctrl.net.rest;
 
-import java.nio.charset.Charset;
+import br.com.softctrl.net.util.HTTPStatusCode;
+import br.com.softctrl.net.util.HTTPStatusCode.StatusCode;
 
 /*
 The MIT License (MIT)
@@ -29,17 +27,30 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
+
 /**
  * @author carlostimoshenkorodrigueslopes@gmail.com
  */
-public final class Constants {
+public class Response<T> {
 
-	public static final Charset UTF_8 = Charset.forName("UTF-8");
-	public static final int CONNECT_TIMEOUT = 5000; // 5 seconds
-	public static final int READ_TIMEOUT = CONNECT_TIMEOUT;
+	private StatusCode mStatusCode;
+	private T mResult;
 
-	public static final String ACCEPT_ENCODING = "Accept-Encoding";
-	public static final String CONTENT_TYPE = "Content-Type";
-	public static final String APPLICATION_JSON = "application/json";
+	public Response(int statusCode, T result) {
+		this.mStatusCode = HTTPStatusCode.resolveStatusCode(statusCode);
+		this.mResult = result;
+	}
 
+	public StatusCode getStatusCode() {
+		return mStatusCode;
+	}
+
+	public T getResult() {
+		return mResult;
+	}
+
+	@Override
+	public String toString() {
+		return String.format("##Status Code: %d\n##Response\n\n%s", this.getStatusCode(), this.getResult());
+	}
 }

@@ -1,13 +1,11 @@
-/**
- * 
- */
-package br.com.softctrl.http.util;
+package br.com.softctrl.net.util;
+
+import static br.com.softctrl.net.util.Constants.UTF_8;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import static br.com.softctrl.http.util.Constants.UTF_8;
 
 /*
 The MIT License (MIT)

@@ -1,12 +1,12 @@
-package br.com.softctrl.http.rest;
+package br.com.softctrl.net.rest;
 
-import static br.com.softctrl.http.util.Constants.ACCEPT_ENCODING;
-import static br.com.softctrl.http.util.Constants.APPLICATION_JSON;
-import static br.com.softctrl.http.util.Constants.CONNECT_TIMEOUT;
-import static br.com.softctrl.http.util.Constants.CONTENT_TYPE;
-import static br.com.softctrl.http.util.Constants.READ_TIMEOUT;
-import static br.com.softctrl.http.util.Constants.UTF_8;
-import static br.com.softctrl.http.util.StreamUtils.streamToString;
+import static br.com.softctrl.net.util.Constants.ACCEPT_ENCODING;
+import static br.com.softctrl.net.util.Constants.APPLICATION_JSON;
+import static br.com.softctrl.net.util.Constants.CONNECT_TIMEOUT;
+import static br.com.softctrl.net.util.Constants.CONTENT_TYPE;
+import static br.com.softctrl.net.util.Constants.READ_TIMEOUT;
+import static br.com.softctrl.net.util.Constants.UTF_8;
+import static br.com.softctrl.net.util.StreamUtils.streamToString;
 
 import java.io.BufferedWriter;
 import java.io.DataOutputStream;
@@ -22,11 +22,11 @@ import java.net.URL;
 import java.nio.charset.Charset;
 import java.util.Set;
 
-import br.com.softctrl.http.rest.listener.RequestFinishedListener;
-import br.com.softctrl.http.rest.listener.ResponseErrorListener;
-import br.com.softctrl.http.rest.listener.ResponseListener;
-import br.com.softctrl.http.util.HTTPStatusCode;
-import br.com.softctrl.http.util.HTTPStatusCode.StatusCode;
+import br.com.softctrl.net.rest.listener.RequestFinishedListener;
+import br.com.softctrl.net.rest.listener.ResponseErrorListener;
+import br.com.softctrl.net.rest.listener.ResponseListener;
+import br.com.softctrl.net.util.HTTPStatusCode;
+import br.com.softctrl.net.util.HTTPStatusCode.StatusCode;
 
 /*
 The MIT License (MIT)
@@ -59,21 +59,21 @@ SOFTWARE.
  * 
  * @author carlostimoshenkorodrigueslopes@gmail.com
  */
-public abstract class AbstractHTTPRestfulClient<R, S> {
+public abstract class AbstractHTTPRestfulClient<R, S> implements IRestfulClient<R, S> {
 	
 	private static final String TAG = AbstractHTTPRestfulClient.class.getSimpleName();
 
-	private int mConnectTimeout = CONNECT_TIMEOUT;
-	private Property mBasicHttpAuthentication = null;
-	private int mReadTimeout = READ_TIMEOUT;
-	private Charset mCharset = UTF_8;
-	private String mContentType = APPLICATION_JSON;
+	protected int mConnectTimeout = CONNECT_TIMEOUT;
+	protected Property mBasicHttpAuthentication = null;
+	protected int mReadTimeout = READ_TIMEOUT;
+	protected Charset mCharset = UTF_8;
+	protected String mContentType = APPLICATION_JSON;
 
-	private ResponseListener<S> mResponseListener;
-	private ResponseErrorListener mResponseErrorListener;
-	private RequestFinishedListener<S> mRequestFinishedListener;
+	protected ResponseListener<S> mResponseListener;
+	protected ResponseErrorListener mResponseErrorListener;
+	protected RequestFinishedListener<S> mRequestFinishedListener;
 
-	private Proxy mProxy = null;
+	protected Proxy mProxy = null;
 
 	/**
 	 * Default constructor with basic listeners.
@@ -115,7 +115,7 @@ public abstract class AbstractHTTPRestfulClient<R, S> {
 	/**
 	 * 
 	 */
-	private final void validateListeners() {
+	protected final void validateListeners() {
 		if (this.mResponseListener == null)
 			throw new IllegalArgumentException("You need to provide a valid ResponseListener.");
 		if (this.mResponseErrorListener == null)
@@ -124,70 +124,105 @@ public abstract class AbstractHTTPRestfulClient<R, S> {
 			throw new IllegalArgumentException("You need to provide a valid RequestFinishedListener.");
 	}
 
-	/**
+	/*
+	 * (non-Javadoc)
 	 * 
-	 * @param connectTimeout
-	 * @return
+	 * @see br.com.softctrl.net.rest.IRestfulClient#setConnectTimeout(int)
 	 */
+	@Override
 	public AbstractHTTPRestfulClient<R, S> setConnectTimeout(int connectTimeout) {
 		this.mConnectTimeout = connectTimeout * 1000;
 		return this;
 	}
 
-	/**
-	 * @param readTimeout
-	 *            in seconds
-	 * @return
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see br.com.softctrl.net.rest.IRestfulClient#setReadTimeout(int)
 	 */
+	@Override
 	public AbstractHTTPRestfulClient<R, S> setReadTimeout(int readTimeout) {
 		this.mReadTimeout = readTimeout * 1000;
 		return this;
 	}
 
-	/**
+	/*
+	 * (non-Javadoc)
 	 * 
-	 * @param charset
-	 * @return
+	 * @see br.com.softctrl.net.rest.IRestfulClient#setCharset(java.nio.charset.
+	 * Charset)
 	 */
+	@Override
 	public AbstractHTTPRestfulClient<R, S> setCharset(Charset charset) {
 		this.mCharset = charset;
 		return this;
 	}
 
-	/**
-	 * @param contentType
-	 *            the content type to set
-	 * @return
+	/*
+	 * (non-Javadoc)
+	 * @see br.com.softctrl.net.rest.IRestfulClient#setContentType(java.lang.String)
 	 */
+	@Override
 	public AbstractHTTPRestfulClient<R, S> setContentType(String contentType) {
 		this.mContentType = contentType;
 		return this;
 	}
 
-	/**
-	 * @param contentType
-	 *            the content type to set
-	 * @return
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * br.com.softctrl.net.rest.IRestfulClient#setBasicAuthentication(java.lang.
+	 * String, java.lang.String)
 	 */
+	@Override
 	public AbstractHTTPRestfulClient<R, S> setBasicAuthentication(String username, String password) {
 		this.mBasicHttpAuthentication = Property.getBasicHttpAuthenticationProperty(username, password);
 		return this;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see br.com.softctrl.net.rest.IRestfulClient#setProxy(java.net.Proxy)
+	 */
+	@Override
 	public AbstractHTTPRestfulClient<R, S> setProxy(Proxy proxy) {
 		this.mProxy = proxy;
 		return this;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see br.com.softctrl.net.rest.IRestfulClient#setProxy(java.lang.String,
+	 * int)
+	 */
+	@Override
 	public AbstractHTTPRestfulClient<R, S> setProxy(String hostname, int port) {
 		return setProxy(Proxy.Type.HTTP, hostname, port);
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * br.com.softctrl.net.rest.IRestfulClient#setProxy(java.net.Proxy.Type,
+	 * java.lang.String, int)
+	 */
+	@Override
 	public AbstractHTTPRestfulClient<R, S> setProxy(Proxy.Type type, String hostname, int port) {
 		this.mProxy = new Proxy(type, new InetSocketAddress(hostname, port));
 		return this;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see br.com.softctrl.net.rest.IRestfulClient#setProxy(java.lang.String,
+	 * java.lang.String, java.lang.String, int)
+	 */
+	@Override
 	public AbstractHTTPRestfulClient<R, S> setProxy(final String username, final String password, final String hostname,
 			final int port) {
 		Authenticator authenticator = new Authenticator() {
@@ -199,6 +234,14 @@ public abstract class AbstractHTTPRestfulClient<R, S> {
 		return setProxy(hostname, port);
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * br.com.softctrl.net.rest.IRestfulClient#setProxy(java.net.Proxy.Type,
+	 * java.lang.String, java.lang.String, java.lang.String, int)
+	 */
+	@Override
 	public AbstractHTTPRestfulClient<R, S> setProxy(Proxy.Type type, final String username, final String password,
 			String hostname, int port) {
 		Authenticator authenticator = new Authenticator() {
@@ -210,12 +253,15 @@ public abstract class AbstractHTTPRestfulClient<R, S> {
 		return setProxy(type, hostname, port);
 	}
 
-	/**
-	 * @param url
-	 * @param httpMethod
-	 * @return
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * br.com.softctrl.net.rest.IRestfulClient#newHttpConnection(br.com.softctrl
+	 * .net.rest.HttpMethod, java.lang.String)
 	 */
-	private final HttpURLConnection newHttpConnection(HttpMethod httpMethod, String url) {
+	@Override
+	public HttpURLConnection newURLConnection(HttpMethod httpMethod, String url) {
 
 		URL uri;
 		HttpURLConnection connection = null;
@@ -246,7 +292,7 @@ public abstract class AbstractHTTPRestfulClient<R, S> {
 		if (request == null)
 			throw new IllegalArgumentException("You need to send a request data.");
 		Response<S> result = null;
-		final HttpURLConnection connection = newHttpConnection(request.getHttpMethod(), request.getUrl());
+		final HttpURLConnection connection = newURLConnection(request.getHttpMethod(), request.getUrl());
 		try {
 			final String parameters = request.getParameters();
 			connection.setDoInput(true);
@@ -329,11 +375,11 @@ public abstract class AbstractHTTPRestfulClient<R, S> {
 	protected abstract Request<R, S> createRequest(final HttpMethod httpMethod, final String url, final R body,
 			final Parameter... parameters);
 
-	/**
-	 * 
-	 * @param request
+	/* (non-Javadoc)
+	 * @see br.com.softctrl.net.rest.IRestfulClient#send(br.com.softctrl.net.rest.Request)
 	 */
-	public synchronized final void send(final Request<R, S> request) {
+	@Override
+	public void send(final Request<R, S> request) {
 		final Response<S> response = perform(request);
 		final HTTPStatusCode.StatusCode statusCode = (response == null ? null : response.getStatusCode());
 		final S result = (response == null ? null : response.getResult());

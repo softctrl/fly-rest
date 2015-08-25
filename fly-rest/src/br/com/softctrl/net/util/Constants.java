@@ -1,4 +1,6 @@
-package br.com.softctrl.http.rest.listener;
+package br.com.softctrl.net.util;
+
+import java.nio.charset.Charset;
 
 /*
 The MIT License (MIT)
@@ -24,16 +26,25 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
-
 /**
  * @author carlostimoshenkorodrigueslopes@gmail.com
  */
-public interface ResponseListener<T> {
+public final class Constants {
 
-	/**
-	 * 
-	 * @param response
-	 */
-	void onResponse(T response);
+	public static final Charset UTF_8 = Charset.forName("UTF-8");
+	public static final int CONNECT_TIMEOUT = 5000; // 5 seconds
+	public static final int READ_TIMEOUT = CONNECT_TIMEOUT;
+
+	public static final String ACCEPT_ENCODING = "Accept-Encoding";
+	public static final String CONTENT_TYPE = "Content-Type";
+	public static final String APPLICATION_JSON = "application/json";
+	
+	//
+	public static final String TLS = "TLS";
+	public static final String RSA = "RSA";
+	public static final String ECDHE_RSA = "ECDHE_RSA";
+	public static final String ECDHE_ECDSA = "ECDHE_ECDSA";
+	public static final String X_509 = "X509";
+	public static final String SHA1 = "SHA1";
 
 }

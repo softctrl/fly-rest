@@ -1,13 +1,10 @@
-package br.com.softctrl.http.rest;
-
-import static br.com.softctrl.http.util.StreamUtils.streamToString;
-import static br.com.softctrl.http.util.StreamUtils.streamToByteArray;
+package br.com.softctrl.net.rest;
 
 import java.io.InputStream;
 
-import br.com.softctrl.http.rest.listener.RequestFinishedListener;
-import br.com.softctrl.http.rest.listener.ResponseErrorListener;
-import br.com.softctrl.http.rest.listener.ResponseListener;
+import br.com.softctrl.net.rest.listener.RequestFinishedListener;
+import br.com.softctrl.net.rest.listener.ResponseErrorListener;
+import br.com.softctrl.net.rest.listener.ResponseListener;
 
 /*
 The MIT License (MIT)
@@ -37,15 +34,15 @@ SOFTWARE.
 /**
  * @author carlostimoshenkorodrigueslopes@gmail.com
  */
-public class UploadFileHTTPRestfulClient extends AbstractHTTPRestfulClient<InputStream, String> {
+public class DownloadFileHTTPRestfulClient extends AbstractHTTPRestfulClient<String, InputStream> {
 
 	/**
 	 * @param responseListener
 	 * @param responseErrorListener
 	 * @param requestFinishedListener
 	 */
-	public UploadFileHTTPRestfulClient(ResponseListener<String> responseListener,
-			ResponseErrorListener responseErrorListener, RequestFinishedListener<String> requestFinishedListener) {
+	public DownloadFileHTTPRestfulClient(ResponseListener<InputStream> responseListener,
+			ResponseErrorListener responseErrorListener, RequestFinishedListener<InputStream> requestFinishedListener) {
 		super(responseListener, responseErrorListener, requestFinishedListener);
 	}
 
@@ -58,19 +55,18 @@ public class UploadFileHTTPRestfulClient extends AbstractHTTPRestfulClient<Input
 	 * br.com.softctrl.http.rest.Parameter[])
 	 */
 	@Override
-	protected Request<InputStream, String> createRequest(HttpMethod httpMethod, String url, InputStream body,
+	protected Request<String, InputStream> createRequest(HttpMethod httpMethod, String url, String body,
 			Parameter... parameters) {
 
-		final Request<InputStream, String> request = new Request<InputStream, String>(httpMethod, url, body) {
+		final Request<String, InputStream> request = new Request<String, InputStream>(httpMethod, url, body) {
 			@Override
-			public Response<String> parseResponse(int statusCode, InputStream result) {
-				String _result = streamToString(result);
-				return new Response<String>(statusCode, _result);
+			public Response<InputStream> parseResponse(int statusCode, InputStream in) {
+				return new Response<InputStream>(statusCode, in);
 			}
 
 			@Override
 			public byte[] bodyToByteArray() {
-				return streamToByteArray(getBody());
+				return (getBody() + "").getBytes();
 			}
 		};
 		if (parameters != null && parameters.length > 0) {
