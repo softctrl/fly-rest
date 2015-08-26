@@ -39,6 +39,13 @@ SOFTWARE.
 public class StringHTTPRestfulClient extends AbstractHTTPRestfulClient<String, String> {
 
 	/**
+	 * 
+	 */
+	public StringHTTPRestfulClient() {
+		super();
+	}
+	
+	/**
 	 * @param responseListener
 	 * @param responseErrorListener
 	 * @param requestFinishedListener
