@@ -40,6 +40,13 @@ SOFTWARE.
  * @author carlostimoshenkorodrigueslopes@gmail.com
  */
 public class JSONArrayHTTPRestfulClient extends AbstractHTTPRestfulClient<String, JSONArray> {
+	
+	/**
+	 * 
+	 */
+	public JSONArrayHTTPRestfulClient() {
+		super();
+	}
 
 	/**
 	 * @param responseListener
