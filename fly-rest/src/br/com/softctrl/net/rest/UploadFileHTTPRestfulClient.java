@@ -38,6 +38,13 @@ SOFTWARE.
  * @author carlostimoshenkorodrigueslopes@gmail.com
  */
 public class UploadFileHTTPRestfulClient extends AbstractHTTPRestfulClient<InputStream, String> {
+	
+	/**
+	 * 
+	 */
+	public UploadFileHTTPRestfulClient() {
+		super();
+	}
 
 	/**
 	 * @param responseListener
