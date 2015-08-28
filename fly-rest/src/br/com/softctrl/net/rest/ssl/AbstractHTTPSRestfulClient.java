@@ -61,6 +61,31 @@ public abstract class AbstractHTTPSRestfulClient<R, S> extends AbstractHTTPRestf
 	private SSLContext mSslContext;
 
 	/**
+	 * Default constructor with basic listeners.
+	 * 
+	 * @throws NoSuchAlgorithmException
+	 */
+	public AbstractHTTPSRestfulClient() {
+		this(new ResponseListener<S>() {
+			@Override
+			public void onResponse(S response) {
+				System.out.format("%s - %s", TAG, response + "");
+			}
+		}, new ResponseErrorListener() {
+			@Override
+			public void onResponseError(StatusCode statusCode, String serverMessage, Throwable throwable) {
+				System.out.format("%s\nMessage: %s\nStatus code: %s", TAG, serverMessage, statusCode);
+				throwable.printStackTrace();
+			}
+		}, new RequestFinishedListener<S>() {
+			@Override
+			public void onRequestFinished(StatusCode statusCode, S response) {
+				System.out.format("%s\nStatus code: %s\nResponse: ", TAG, statusCode, response);
+			}
+		});
+	}
+
+	/**
 	 * @param responseListener
 	 * @param responseErrorListener
 	 * @param requestFinishedListener
@@ -107,4 +132,32 @@ public abstract class AbstractHTTPSRestfulClient<R, S> extends AbstractHTTPRestf
 
 	}
 	
+	/**
+	 * Base on:
+	 * https://www.owasp.org/index.php/Certificate_and_Public_Key_Pinning#Android
+	 * @param pins
+	 * @return
+	 * @throws KeyManagementException
+	 * @throws NoSuchAlgorithmException
+	 */
+	public AbstractHTTPSRestfulClient<R, S> setupPinningManager(List<byte[]> pins)
+			throws KeyManagementException, NoSuchAlgorithmException {
+		TrustManager tm[] = { new SCPinningTrustManager(pins) };
+		return this.setupTrustManager(tm);
+	}
+	
+	/**
+	 * 
+	 * @param trustManagers
+	 * @return
+	 * @throws KeyManagementException
+	 * @throws NoSuchAlgorithmException
+	 */
+	public AbstractHTTPSRestfulClient<R, S> setupTrustManager(TrustManager[] trustManagers)
+			throws KeyManagementException, NoSuchAlgorithmException {
+		this.mSslContext = SSLContext.getInstance(Constants.TLS);
+		this.mSslContext.init(null, trustManagers, null);
+		return this;
+	}	
+
 }
