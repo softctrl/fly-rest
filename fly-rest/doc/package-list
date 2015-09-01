@@ -1,0 +1,5 @@
+br.com.softctrl.net.rest
+br.com.softctrl.net.rest.listener
+br.com.softctrl.net.rest.ssl
+br.com.softctrl.net.rest.ssl.pinning
+br.com.softctrl.net.util
