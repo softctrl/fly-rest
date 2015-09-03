@@ -89,7 +89,7 @@ public class SCPinningTrustManager implements X509TrustManager {
 		}
 
 		if (null != authType && !isValidAuthType(authType)) {
-			throw new CertificateException(TAG + ": AuthType is not RSA[" + authType + "]");
+			throw new CertificateException(TAG + ": The AuthType[" + authType + "] is not allowed.");
 		}
 		try {
 			TrustManagerFactory tmf = TrustManagerFactory.getInstance(Constants.X_509);
