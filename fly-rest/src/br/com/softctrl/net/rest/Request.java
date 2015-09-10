@@ -105,7 +105,9 @@ public abstract class Request<R, S> {
 	public String getUrl() {
 		final StringBuilder url = new StringBuilder(this.mUrl);
 		if (HttpMethod.GET.equals(this.getHttpMethod())) {
-			url.append('?').append(this.getParameters());
+			if (this.mParameters != null && this.mParameters.size() > 0) {
+				url.append('?').append(this.getParameters());
+			}
 		}
 		return url.toString();
 	}
