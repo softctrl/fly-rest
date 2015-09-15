@@ -56,7 +56,6 @@ public class JSONArrayHTTPRestfulClient extends AbstractHTTPRestfulClient<String
 	public JSONArrayHTTPRestfulClient(ResponseListener<JSONArray> responseListener,
 			ResponseErrorListener responseErrorListener, RequestFinishedListener<JSONArray> requestFinishedListener) {
 		super(responseListener, responseErrorListener, requestFinishedListener);
-		// TODO Auto-generated constructor stub
 	}
 
 	/*
@@ -74,7 +73,7 @@ public class JSONArrayHTTPRestfulClient extends AbstractHTTPRestfulClient<String
 			@Override
 			public Response<JSONArray> parseResponse(int statusCode, InputStream result) {
 				try {
-					String _result = streamToString(result).replaceAll("(<pre>|</pre>)", ""); // TODO remover depois validacao <pre>
+					String _result = streamToString(result);
 					return new Response<JSONArray>(statusCode, new JSONArray(_result));
 				} catch (JSONException e) {
 					throw new RuntimeException(e);
