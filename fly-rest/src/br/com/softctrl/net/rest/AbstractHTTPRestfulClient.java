@@ -131,7 +131,7 @@ public abstract class AbstractHTTPRestfulClient<R, S> implements IRestfulClient<
 	 */
 	@Override
 	public AbstractHTTPRestfulClient<R, S> setConnectTimeout(int connectTimeout) {
-		this.mConnectTimeout = connectTimeout * 1000;
+		this.mConnectTimeout = connectTimeout;
 		return this;
 	}
 
@@ -142,7 +142,7 @@ public abstract class AbstractHTTPRestfulClient<R, S> implements IRestfulClient<
 	 */
 	@Override
 	public AbstractHTTPRestfulClient<R, S> setReadTimeout(int readTimeout) {
-		this.mReadTimeout = readTimeout * 1000;
+		this.mReadTimeout = readTimeout;
 		return this;
 	}
 
