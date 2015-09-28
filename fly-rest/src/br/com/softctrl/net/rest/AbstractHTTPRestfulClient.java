@@ -337,17 +337,21 @@ public abstract class AbstractHTTPRestfulClient<R, S> implements IRestfulClient<
 			result = request.parseResponse(connection.getResponseCode(), connection.getInputStream());
 			this.mResponseListener.onResponse(result == null ? null : result.getResult());
 		} catch (java.net.SocketTimeoutException e) {
-			final String response = streamToString(connection.getErrorStream());
-			final HTTPStatusCode.StatusCode statusCode = HTTPStatusCode.resolveStatusCode(408);
-			this.mResponseErrorListener.onResponseError(statusCode, response, e);
+			try {
+				final String response = streamToString(connection.getErrorStream());
+				final HTTPStatusCode.StatusCode statusCode = HTTPStatusCode.resolveStatusCode(408);
+				this.mResponseErrorListener.onResponseError(statusCode, response, e);
+			} catch (Exception e1) {
+				this.mResponseErrorListener.onResponseError(null, null, e1);
+			}
 		} catch (IOException e) {
 			try {
 				final String response = streamToString(connection.getErrorStream());
 				final HTTPStatusCode.StatusCode statusCode = HTTPStatusCode
 						.resolveStatusCode(connection.getResponseCode());
 				this.mResponseErrorListener.onResponseError(statusCode, response, e);
-			} catch (IOException e1) {
-				this.mResponseErrorListener.onResponseError(null, null, e1);
+			} catch (Exception e2) {
+				this.mResponseErrorListener.onResponseError(null, null, e2);
 			}
 		}
 		return result;
