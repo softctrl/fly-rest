@@ -57,7 +57,9 @@ public class SCPinningTrustManager implements X509TrustManager {
 	private final Set<X509Certificate> mCache = Collections.synchronizedSet(new HashSet<X509Certificate>());
 
 	public SCPinningTrustManager(List<byte[]> pins) {
-		this(pins, new String[]{Constants.RSA, Constants.ECDHE_RSA, Constants.ECDHE_ECDSA});
+		this(pins, new String[]{Constants.RSA,
+				                Constants.ECDHE_RSA,
+				                Constants.ECDHE_ECDSA});
 		
 	}
 
