@@ -1,5 +1,7 @@
 package br.com.softctrl.net.rest.ssl.pinning;
 
+import static br.com.softctrl.net.util.StringUtils.byteArrayToHexString;
+
 import java.security.KeyStore;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -17,7 +19,6 @@ import javax.net.ssl.TrustManagerFactory;
 import javax.net.ssl.X509TrustManager;
 
 import br.com.softctrl.net.util.Constants;
-import static br.com.softctrl.net.util.StringUtils.byteArrayToHexString;
 
 /*
 The MIT License (MIT)
@@ -130,8 +131,12 @@ public class SCPinningTrustManager implements X509TrustManager {
 			final MessageDigest digest = MessageDigest.getInstance(Constants.SHA1);
 			final byte[] spki = certificate.getPublicKey().getEncoded();
 			final byte[] pin = digest.digest(spki);
-			System.out.println();
-			for (byte[] validPin : this.getPins()) {
+			final List<byte[]> pins = this.getPins();
+			if (pins == null || pins.size() == 0)
+				throw new RuntimeException(String.format(
+						"You dont have any configured pin yet.\nIf you want you can add this pin [%s] for this url.",
+						Arrays.toString(pin)));
+			for (byte[] validPin : pins) {
 				if (Arrays.equals(validPin, pin)) {
 					return true;
 				}
