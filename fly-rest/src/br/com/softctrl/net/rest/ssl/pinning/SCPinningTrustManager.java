@@ -51,6 +51,21 @@ SOFTWARE.
  */
 public class SCPinningTrustManager implements X509TrustManager {
 
+	/**
+	 * 
+	 */
+	private static final String THE_AUTH_TYPE_S_IS_NOT_ALLOWED = ": The AuthType[%s] is not allowed.";
+
+	/**
+	 * 
+	 */
+	private static final String X509_CERTIFICATE_IS_EMPTY = ": X509Certificate is empty";
+
+	/**
+	 * 
+	 */
+	private static final String X509_CERTIFICATE_ARRAY_IS_NULL = ": X509Certificate array is null";
+
 	private static final String TAG = SCPinningTrustManager.class.getSimpleName();
 
 	private final List<byte[]> mPins = new LinkedList<byte[]>();
@@ -80,19 +95,16 @@ public class SCPinningTrustManager implements X509TrustManager {
 	public void checkServerTrusted(X509Certificate[] chain, String authType) throws CertificateException {
 
 		if (chain == null) {
-			throw new IllegalArgumentException(TAG + ": X509Certificate array is null");
+			throw new IllegalArgumentException(TAG + X509_CERTIFICATE_ARRAY_IS_NULL);
 		}
-
 		if (chain.length < 0) {
-			throw new IllegalArgumentException(TAG + ": X509Certificate is empty");
+			throw new IllegalArgumentException(TAG + X509_CERTIFICATE_IS_EMPTY);
 		}
-
 		if (this.getCache().contains(chain[0])) {
 			return;
 		}
-
 		if (null != authType && !isValidAuthType(authType)) {
-			throw new CertificateException(TAG + ": The AuthType[" + authType + "] is not allowed.");
+			throw new CertificateException(TAG + String.format(THE_AUTH_TYPE_S_IS_NOT_ALLOWED, authType));
 		}
 		try {
 			TrustManagerFactory tmf = TrustManagerFactory.getInstance(Constants.X_509);
