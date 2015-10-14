@@ -50,20 +50,11 @@ SOFTWARE.
  * @author carlostimoshenkorodrigueslopes@gmail.com
  */
 public class SCPinningTrustManager implements X509TrustManager {
-
-	/**
-	 * 
-	 */
+	
+	private static final String YOU_DONT_HAVE_ANY_CONFIGURED_PIN_YET_IF_YOU_WANT_YOU_CAN_ADD_THIS_PIN_S_FOR_THIS_URL = "You dont have any configured pin yet.\nIf you want you can add this pin [%s] for this url.";
+	private static final String INVALID_PUBLIC_KEY = ": Invalid public key:";
 	private static final String THE_AUTH_TYPE_S_IS_NOT_ALLOWED = ": The AuthType[%s] is not allowed.";
-
-	/**
-	 * 
-	 */
 	private static final String X509_CERTIFICATE_IS_EMPTY = ": X509Certificate is empty";
-
-	/**
-	 * 
-	 */
 	private static final String X509_CERTIFICATE_ARRAY_IS_NULL = ": X509Certificate array is null";
 
 	private static final String TAG = SCPinningTrustManager.class.getSimpleName();
@@ -146,14 +137,14 @@ public class SCPinningTrustManager implements X509TrustManager {
 			final List<byte[]> pins = this.getPins();
 			if (pins == null || pins.size() == 0)
 				throw new RuntimeException(String.format(
-						"You dont have any configured pin yet.\nIf you want you can add this pin [%s] for this url.",
+						YOU_DONT_HAVE_ANY_CONFIGURED_PIN_YET_IF_YOU_WANT_YOU_CAN_ADD_THIS_PIN_S_FOR_THIS_URL,
 						Arrays.toString(pin)));
 			for (byte[] validPin : pins) {
 				if (Arrays.equals(validPin, pin)) {
 					return true;
 				}
 			}
-			throw new CertificateException(TAG + ": Invalid public key:" + byteArrayToHexString(pin));
+			throw new CertificateException(TAG + INVALID_PUBLIC_KEY + byteArrayToHexString(pin));
 		} catch (NoSuchAlgorithmException nsae) {
 			throw new CertificateException(TAG, nsae);
 		}
