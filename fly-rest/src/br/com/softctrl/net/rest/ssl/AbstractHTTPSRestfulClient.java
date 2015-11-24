@@ -9,11 +9,13 @@ import static br.com.softctrl.net.util.Constants.CONTENT_TYPE;
 import java.net.URL;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
+import java.security.cert.X509Certificate;
 import java.util.List;
 
 import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
 
 import br.com.softctrl.net.rest.AbstractHTTPRestfulClient;
 import br.com.softctrl.net.rest.HttpMethod;
@@ -50,7 +52,8 @@ SOFTWARE.
 */
 
 /**
- * [R]equest Re[S]ponse
+ * [R]equest
+ * Re[S]ponse
  * 
  * @author carlostimoshenkorodrigueslopes@gmail.com
  */
@@ -131,10 +134,12 @@ public abstract class AbstractHTTPSRestfulClient<R, S> extends AbstractHTTPRestf
 		return connection;
 
 	}
-	
+
 	/**
 	 * Base on:
-	 * https://www.owasp.org/index.php/Certificate_and_Public_Key_Pinning#Android
+	 * https://www.owasp.org/index.php/Certificate_and_Public_Key_Pinning#
+	 * Android
+	 * 
 	 * @param pins
 	 * @return
 	 * @throws KeyManagementException
@@ -145,7 +150,7 @@ public abstract class AbstractHTTPSRestfulClient<R, S> extends AbstractHTTPRestf
 		TrustManager tm[] = { new SCPinningTrustManager(pins) };
 		return this.setupTrustManager(tm);
 	}
-	
+
 	/**
 	 * 
 	 * @param trustManagers
@@ -155,9 +160,33 @@ public abstract class AbstractHTTPSRestfulClient<R, S> extends AbstractHTTPRestf
 	 */
 	public AbstractHTTPSRestfulClient<R, S> setupTrustManager(TrustManager[] trustManagers)
 			throws KeyManagementException, NoSuchAlgorithmException {
+		this.setTrustManager(trustManagers);
+		return this;
+	}
+	
+	private void setTrustManager(TrustManager[] trustManagers) throws NoSuchAlgorithmException, KeyManagementException {
 		this.mSslContext = SSLContext.getInstance(Constants.TLS);
 		this.mSslContext.init(null, trustManagers, null);
+		HttpsURLConnection.setDefaultSSLSocketFactory(this.mSslContext.getSocketFactory());
+	}
+
+	/**
+	 * 
+	 * @return
+	 * @throws NoSuchAlgorithmException
+	 * @throws KeyManagementException
+	 */
+	public AbstractHTTPSRestfulClient<R, S> accpectSelfsignedCertificate() throws NoSuchAlgorithmException, KeyManagementException {
+		TrustManager[] trustAllCerts = new TrustManager[] { new X509TrustManager() {
+			public java.security.cert.X509Certificate[] getAcceptedIssuers() {
+				return new X509Certificate[0];
+			}
+			public void checkClientTrusted(java.security.cert.X509Certificate[] certs, String authType) { }
+
+			public void checkServerTrusted(java.security.cert.X509Certificate[] certs, String authType) { }
+		} };
+		this.setTrustManager(trustAllCerts);
 		return this;
-	}	
+	}
 
 }
