@@ -51,11 +51,11 @@ SOFTWARE.
  */
 public class SCPinningTrustManager implements X509TrustManager {
 	
-	private static final String YOU_DONT_HAVE_ANY_CONFIGURED_PIN_YET_IF_YOU_WANT_YOU_CAN_ADD_THIS_PIN_S_FOR_THIS_URL = "You dont have any configured pin yet.\nIf you want you can add this pin [%s] for this url.";
-	private static final String INVALID_PUBLIC_KEY = ": Invalid public key:";
-	private static final String THE_AUTH_TYPE_S_IS_NOT_ALLOWED = ": The AuthType[%s] is not allowed.";
-	private static final String X509_CERTIFICATE_IS_EMPTY = ": X509Certificate is empty";
-	private static final String X509_CERTIFICATE_ARRAY_IS_NULL = ": X509Certificate array is null";
+	private static final String ERROR_ADD_THIS_PIN_S_FOR_THIS_URL = "You dont have any configured pin yet.\nIf you want you can add this pin [%s] for this url.";
+	private static final String ERROR_INVALID_PUBLIC_KEY = ": Invalid public key:";
+	private static final String ERROR_THE_AUTH_TYPE_IS_NOT_ALLOWED = ": The AuthType[%s] is not allowed.";
+	private static final String ERROR_X509_CERTIFICATE_IS_EMPTY = ": X509Certificate is empty";
+	private static final String ERROR_X509_CERTIFICATE_ARRAY_IS_NULL = ": X509Certificate array is null";
 
 	private static final String TAG = SCPinningTrustManager.class.getSimpleName();
 
@@ -86,16 +86,16 @@ public class SCPinningTrustManager implements X509TrustManager {
 	public void checkServerTrusted(X509Certificate[] chain, String authType) throws CertificateException {
 
 		if (chain == null) {
-			throw new IllegalArgumentException(TAG + X509_CERTIFICATE_ARRAY_IS_NULL);
+			throw new IllegalArgumentException(TAG + ERROR_X509_CERTIFICATE_ARRAY_IS_NULL);
 		}
 		if (chain.length < 0) {
-			throw new IllegalArgumentException(TAG + X509_CERTIFICATE_IS_EMPTY);
+			throw new IllegalArgumentException(TAG + ERROR_X509_CERTIFICATE_IS_EMPTY);
 		}
 		if (this.getCache().contains(chain[0])) {
 			return;
 		}
 		if (null != authType && !isValidAuthType(authType)) {
-			throw new CertificateException(TAG + String.format(THE_AUTH_TYPE_S_IS_NOT_ALLOWED, authType));
+			throw new CertificateException(TAG + String.format(ERROR_THE_AUTH_TYPE_IS_NOT_ALLOWED, authType));
 		}
 		try {
 			TrustManagerFactory tmf = TrustManagerFactory.getInstance(Constants.X_509);
@@ -137,14 +137,14 @@ public class SCPinningTrustManager implements X509TrustManager {
 			final List<byte[]> pins = this.getPins();
 			if (pins == null || pins.size() == 0)
 				throw new RuntimeException(String.format(
-						YOU_DONT_HAVE_ANY_CONFIGURED_PIN_YET_IF_YOU_WANT_YOU_CAN_ADD_THIS_PIN_S_FOR_THIS_URL,
+						ERROR_ADD_THIS_PIN_S_FOR_THIS_URL,
 						Arrays.toString(pin)));
 			for (byte[] validPin : pins) {
 				if (Arrays.equals(validPin, pin)) {
 					return true;
 				}
 			}
-			throw new CertificateException(TAG + INVALID_PUBLIC_KEY + byteArrayToHexString(pin));
+			throw new CertificateException(TAG + ERROR_INVALID_PUBLIC_KEY + byteArrayToHexString(pin));
 		} catch (NoSuchAlgorithmException nsae) {
 			throw new CertificateException(TAG, nsae);
 		}
