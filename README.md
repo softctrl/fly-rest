@@ -1,5 +1,3 @@
-#I need to make some changings to a better suport of tls/ssl.
-
 # fly-rest
 Restfull Library to use on Android mobile projects 
 
