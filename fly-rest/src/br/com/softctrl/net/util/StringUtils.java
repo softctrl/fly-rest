@@ -29,6 +29,8 @@ SOFTWARE.
  * @author carlostimoshenkorodrigueslopes@gmail.com
  */
 public final class StringUtils {
+	
+	private static final String _02X = "%02x";
 
 	private StringUtils() {
 	}
@@ -57,7 +59,7 @@ public final class StringUtils {
 		int len = array.length;
 		StringBuilder result = new StringBuilder();
 		for (int idx = 0; idx < len; idx++) {
-			result.append(String.format("%02x", array[idx]));
+			result.append(String.format(_02X, array[idx]));
 		}
 		return result.toString();
 	}
