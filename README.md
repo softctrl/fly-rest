@@ -47,3 +47,5 @@ And finally:
 		String body = null;
 		restfulClient.get(url, body);
 ```
+
+### Soon i will add this library to maven central!!!
