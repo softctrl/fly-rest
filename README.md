@@ -49,3 +49,5 @@ And finally:
 ```
 
 ### Soon (well not so soon like i want :D but....) i will add this library to maven central!!!
+
+### I'm also working on a http redirection support too.
