@@ -58,29 +58,26 @@ public class StringHTTPRestfulClient extends AbstractHTTPRestfulClient<String, S
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see br.com.softctrl.http.rest.BasicHTTPRestClient#createRequest(br.com.
-	 * softctrl. rest.HttpMethod, java.lang.String, java.lang.Object,
-	 * br.com.softctrl.http.rest.Parameter[])
+	 * @see
+	 * br.com.softctrl.net.rest.AbstractHTTPRestfulClient#createRequest(br.com.
+	 * softctrl.net.rest.HttpMethod, java.lang.String, java.lang.Object,
+	 * br.com.softctrl.net.rest.Parameter[],
+	 * br.com.softctrl.net.rest.Property[])
 	 */
 	@Override
 	protected Request<String, String> createRequest(HttpMethod httpMethod, String url, String body,
-			Parameter... parameters) {
+			Parameter[] parameters, Property[] properties) {
 		final Request<String, String> request = new Request<String, String>(httpMethod, url, body) {
 			@Override
 			public Response<String> parseResponse(int statusCode, InputStream result) {
 				return new Response<String>(statusCode, streamToString(result));
 			}
-
 			@Override
 			public byte[] bodyToByteArray() {
 				return (getBody() + "").getBytes();
 			}
 		};
-		if (parameters != null && parameters.length > 0) {
-			for (Parameter parameter : parameters) {
-				request.addParameter(parameter);
-			}
-		}
+		this.loadData(request, parameters, properties);
 		return request;
 	}
 

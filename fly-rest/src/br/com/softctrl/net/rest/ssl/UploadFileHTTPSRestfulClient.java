@@ -7,6 +7,7 @@ import java.io.InputStream;
 
 import br.com.softctrl.net.rest.HttpMethod;
 import br.com.softctrl.net.rest.Parameter;
+import br.com.softctrl.net.rest.Property;
 import br.com.softctrl.net.rest.Request;
 import br.com.softctrl.net.rest.Response;
 import br.com.softctrl.net.rest.listener.RequestFinishedListener;
@@ -60,17 +61,18 @@ public class UploadFileHTTPSRestfulClient extends AbstractHTTPSRestfulClient<Inp
         super(responseListener, responseErrorListener, requestFinishedListener);
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see
-     * br.com.softctrl.http.rest.AbstractHTTPRestfulClient#createRequest(br.com.
-     * softctrl.http.rest.HttpMethod, java.lang.String, java.lang.Object,
-     * br.com.softctrl.http.rest.Parameter[])
-     */
-    @Override
-    protected Request<InputStream, String> createRequest(HttpMethod httpMethod, String url, InputStream body,
-            Parameter... parameters) {
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * br.com.softctrl.net.rest.AbstractHTTPRestfulClient#createRequest(br.com.
+	 * softctrl.net.rest.HttpMethod, java.lang.String, java.lang.Object,
+	 * br.com.softctrl.net.rest.Parameter[],
+	 * br.com.softctrl.net.rest.Property[])
+	 */
+	@Override
+	protected Request<InputStream, String> createRequest(HttpMethod httpMethod, String url, InputStream body,
+			Parameter[] parameters, Property[] properties) {
 
         final Request<InputStream, String> request = new Request<InputStream, String>(httpMethod, url, body) {
             @Override
@@ -78,18 +80,14 @@ public class UploadFileHTTPSRestfulClient extends AbstractHTTPSRestfulClient<Inp
                 String _result = streamToString(result);
                 return new Response<String>(statusCode, _result);
             }
-
             @Override
             public byte[] bodyToByteArray() {
                 return streamToByteArray(getBody());
             }
         };
-        if (parameters != null && parameters.length > 0) {
-            for (Parameter parameter : parameters) {
-                request.addParameter(parameter);
-            }
-        }
+        this.loadData(request, parameters, properties);
         return request;
-    }
+
+	}
 
 }

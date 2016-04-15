@@ -1,4 +1,4 @@
-package br.com.softctrl.net.rest;
+package br.com.softctrl.net.util;
 
 /*
 The MIT License (MIT)
@@ -26,6 +26,7 @@ SOFTWARE.
 */
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -87,6 +88,42 @@ public class Objects {
 	 */
 	public static boolean equals(Object obj1, Object obj2) {
 		return obj1 == obj2 || (obj1 != null && obj1.equals(obj2));
+	}
+	
+	/**
+	 * 
+	 * @param obj
+	 * @return
+	 */
+	public static <T> boolean isNull(T obj){
+		return (obj == null);
+	}
+	
+	/**
+	 * 
+	 * @param value
+	 * @return
+	 */
+	public static boolean isNullOrEmpty(String value){
+		return ((value+"").trim().length() > 0);
+	}
+
+	/**
+	 * 
+	 * @param items
+	 * @return
+	 */
+	public static <T> boolean isNullOrEmpty(T[] items){
+		return (isNull(items) ? true : (items.length == 0));
+	}
+
+	/**
+	 * 
+	 * @param items
+	 * @return
+	 */
+	public static <T> boolean isNullOrEmpty(List<T> items){
+		return (isNull(items) ? true : (items.size() == 0));
 	}
 
 }

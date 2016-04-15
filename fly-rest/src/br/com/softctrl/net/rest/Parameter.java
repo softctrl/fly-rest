@@ -5,6 +5,8 @@ import static java.net.URLEncoder.encode;
 
 import java.io.UnsupportedEncodingException;
 
+import br.com.softctrl.net.util.Objects;
+
 
 /*
 The MIT License (MIT)

@@ -27,6 +27,7 @@ import br.com.softctrl.net.rest.listener.ResponseErrorListener;
 import br.com.softctrl.net.rest.listener.ResponseListener;
 import br.com.softctrl.net.util.HTTPStatusCode;
 import br.com.softctrl.net.util.HTTPStatusCode.StatusCode;
+import br.com.softctrl.net.util.Objects;
 
 /*
 The MIT License (MIT)
@@ -113,7 +114,7 @@ public abstract class AbstractHTTPRestfulClient<R, S> implements IRestfulClient<
 	}
 
 	/**
-	 * 
+	 * Just to validate the listeners.
 	 */
 	protected final void validateListeners() {
 		if (this.mResponseListener == null)
@@ -133,7 +134,7 @@ public abstract class AbstractHTTPRestfulClient<R, S> implements IRestfulClient<
 		this.mResponseListener = responseListener;
 		return this;
 	}
-	
+
 	/**
 	 * 
 	 * @param responseErrorListener
@@ -397,7 +398,21 @@ public abstract class AbstractHTTPRestfulClient<R, S> implements IRestfulClient<
 	 */
 	public synchronized final void send(final HttpMethod httpMethod, final String url, final R body,
 			final Parameter... parameters) {
-		final Request<R, S> request = createRequest(httpMethod, url, body, parameters);
+		final Request<R, S> request = createRequest(httpMethod, url, body, parameters, null);
+		send((Request<R, S>) request);
+
+	}
+	
+	/**
+	 * 
+	 * @param httpMethod
+	 * @param url
+	 * @param body
+	 * @param properties
+	 */
+	public synchronized final void send(final HttpMethod httpMethod, final String url, final R body,
+			final Property... properties) {
+		final Request<R, S> request = createRequest(httpMethod, url, body, null, properties);
 		send((Request<R, S>) request);
 
 	}
@@ -408,10 +423,26 @@ public abstract class AbstractHTTPRestfulClient<R, S> implements IRestfulClient<
 	 * @param url
 	 * @param body
 	 * @param parameters
+	 * @param property
+	 */
+	public synchronized final void send(final HttpMethod httpMethod, final String url, final R body,
+			final Parameter[] parameters, final Property[] property) {
+		final Request<R, S> request = createRequest(httpMethod, url, body, parameters, property);
+		send((Request<R, S>) request);
+
+	}
+
+	/**
+	 * 
+	 * @param httpMethod
+	 * @param url
+	 * @param body
+	 * @param parameters
+	 * @param properties
 	 * @return
 	 */
 	protected abstract Request<R, S> createRequest(final HttpMethod httpMethod, final String url, final R body,
-			final Parameter... parameters);
+			final Parameter[] parameters, final Property[] properties);
 
 	/* (non-Javadoc)
 	 * @see br.com.softctrl.net.rest.IRestfulClient#send(br.com.softctrl.net.rest.Request)
@@ -460,6 +491,24 @@ public abstract class AbstractHTTPRestfulClient<R, S> implements IRestfulClient<
 	public synchronized final void delete(final String url, final R body, final Parameter... parameters) {
 		this.send(HttpMethod.DELETE, url, body, parameters);
 	}
-
-
+	
+	/**
+	 * 
+	 * @param request
+	 * @param parameters
+	 * @param properties
+	 */
+	protected void loadData(final Request<R, S> request, final Parameter[] parameters, final Property[] properties){
+		if (!Objects.isNullOrEmpty(parameters)) {
+			for (Parameter parameter : parameters) {
+				request.add(parameter);
+			}
+		}
+		if (!Objects.isNullOrEmpty(properties)) {
+			for (Property property : properties) {
+				request.add(property);
+			}
+		}		
+	}
+	
 }

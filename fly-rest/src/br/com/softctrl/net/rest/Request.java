@@ -66,26 +66,54 @@ public abstract class Request<R, S> {
 	private Set<Property> mProperties = new HashSet<Property>();
 	private R mBody;
 
+	/**
+	 * 
+	 * @param httpMethod
+	 * @param url
+	 * @param body
+	 */
 	public Request(HttpMethod httpMethod, String url, R body) {
 		this.mHttpMethod = httpMethod;
 		this.mUrl = url;
 		this.mBody = body;
 	}
 
+	/**
+	 * 
+	 * @param name
+	 * @param value
+	 * @return
+	 */
 	public Request<R, S> addParameter(String name, String value) {
-		return this.addParameter(new Parameter(name, value));
+		return this.add(new Parameter(name, value));
 	}
 
-	public Request<R, S> addParameter(Parameter parameter) {
+	/**
+	 * 
+	 * @param parameter
+	 * @return
+	 */
+	public Request<R, S> add(Parameter parameter) {
 		this.mParameters.add(parameter);
 		return this;
 	}
 
+	/**
+	 * 
+	 * @param name
+	 * @param value
+	 * @return
+	 */
 	public Request<R, S> addProperty(String name, String value) {
-		return this.addProperty(new Property(name, value));
+		return this.add(new Property(name, value));
 	}
 
-	public Request<R, S> addProperty(Property property) {
+	/**
+	 * 
+	 * @param property
+	 * @return
+	 */
+	public Request<R, S> add(Property property) {
 		this.mProperties.add(property);
 		return this;
 	}

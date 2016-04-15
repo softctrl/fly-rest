@@ -9,6 +9,7 @@ import org.json.JSONObject;
 
 import br.com.softctrl.net.rest.HttpMethod;
 import br.com.softctrl.net.rest.Parameter;
+import br.com.softctrl.net.rest.Property;
 import br.com.softctrl.net.rest.Request;
 import br.com.softctrl.net.rest.Response;
 import br.com.softctrl.net.rest.listener.RequestFinishedListener;
@@ -68,11 +69,13 @@ public class JSONObjectHTTPSRestfulClient extends AbstractHTTPSRestfulClient<Str
 	 * @see
 	 * br.com.softctrl.net.rest.AbstractHTTPRestfulClient#createRequest(br.com.
 	 * softctrl.net.rest.HttpMethod, java.lang.String, java.lang.Object,
-	 * br.com.softctrl.net.rest.Parameter[])
+	 * br.com.softctrl.net.rest.Parameter[],
+	 * br.com.softctrl.net.rest.Property[])
 	 */
 	@Override
 	protected Request<String, JSONObject> createRequest(HttpMethod httpMethod, String url, String body,
-			Parameter... parameters) {
+			Parameter[] parameters, Property[] properties) {
+
 		final Request<String, JSONObject> request = new Request<String, JSONObject>(httpMethod, url, body) {
 			@Override
 			public Response<JSONObject> parseResponse(int statusCode, InputStream result) {
@@ -89,12 +92,9 @@ public class JSONObjectHTTPSRestfulClient extends AbstractHTTPSRestfulClient<Str
 				return (getBody() + "").getBytes();
 			}
 		};
-		if (parameters != null && parameters.length > 0) {
-			for (Parameter parameter : parameters) {
-				request.addParameter(parameter);
-			}
-		}
+		this.loadData(request, parameters, properties);
 		return request;
+
 	}
 
 }

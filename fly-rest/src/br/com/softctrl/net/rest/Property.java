@@ -32,6 +32,7 @@ import static java.net.URLEncoder.encode;
 import java.io.UnsupportedEncodingException;
 
 import br.com.softctrl.net.util.Base64;
+import br.com.softctrl.net.util.Objects;
 
 /**
  * @author carlostimoshenkorodrigueslopes@gmail.com

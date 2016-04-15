@@ -60,13 +60,14 @@ public class UploadFileHTTPRestfulClient extends AbstractHTTPRestfulClient<Input
 	 * (non-Javadoc)
 	 * 
 	 * @see
-	 * br.com.softctrl.http.rest.AbstractHTTPRestfulClient#createRequest(br.com.
-	 * softctrl.http.rest.HttpMethod, java.lang.String, java.lang.Object,
-	 * br.com.softctrl.http.rest.Parameter[])
+	 * br.com.softctrl.net.rest.AbstractHTTPRestfulClient#createRequest(br.com.
+	 * softctrl.net.rest.HttpMethod, java.lang.String, java.lang.Object,
+	 * br.com.softctrl.net.rest.Parameter[],
+	 * br.com.softctrl.net.rest.Property[])
 	 */
 	@Override
 	protected Request<InputStream, String> createRequest(HttpMethod httpMethod, String url, InputStream body,
-			Parameter... parameters) {
+			Parameter[] parameters, Property[] properties) {
 
 		final Request<InputStream, String> request = new Request<InputStream, String>(httpMethod, url, body) {
 			@Override
@@ -80,12 +81,9 @@ public class UploadFileHTTPRestfulClient extends AbstractHTTPRestfulClient<Input
 				return streamToByteArray(getBody());
 			}
 		};
-		if (parameters != null && parameters.length > 0) {
-			for (Parameter parameter : parameters) {
-				request.addParameter(parameter);
-			}
-		}
+		this.loadData(request, parameters, properties);
 		return request;
+
 	}
 
 }
