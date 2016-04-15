@@ -123,6 +123,36 @@ public abstract class AbstractHTTPRestfulClient<R, S> implements IRestfulClient<
 		if (this.mRequestFinishedListener == null)
 			throw new IllegalArgumentException("You need to provide a valid RequestFinishedListener.");
 	}
+	
+	/**
+	 * 
+	 * @param responseListener
+	 * @return
+	 */
+	public AbstractHTTPRestfulClient<R, S> setResponseListener(ResponseListener<S> responseListener) {
+		this.mResponseListener = responseListener;
+		return this;
+	}
+	
+	/**
+	 * 
+	 * @param responseErrorListener
+	 * @return
+	 */
+	public AbstractHTTPRestfulClient<R, S> setResponseErrorListener(ResponseErrorListener responseErrorListener) {
+		this.mResponseErrorListener = responseErrorListener;
+		return this;
+	}
+	
+	/**
+	 * 
+	 * @param requestFinishedListener
+	 * @return
+	 */
+	public AbstractHTTPRestfulClient<R, S> setRequestFinishedListener(RequestFinishedListener<S> requestFinishedListener) {
+		this.mRequestFinishedListener = requestFinishedListener;
+		return this;
+	}
 
 	/*
 	 * (non-Javadoc)
