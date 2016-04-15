@@ -37,35 +37,37 @@ SOFTWARE.
  * @author carlostimoshenkorodrigueslopes@gmail.com
  */
 public interface IRestfulClient<R, S> {
-	
+
 	/**
 	 * 
 	 * @param connectTimeout
 	 * @return
 	 */
 	public IRestfulClient<R, S> setConnectTimeout(int connectTimeout);
-	
+
 	/**
 	 * 
-	 * @param readTimeout in seconds
+	 * @param readTimeout
+	 *            in seconds
 	 * @return
 	 */
 	public IRestfulClient<R, S> setReadTimeout(int readTimeout);
-	
+
 	/**
 	 * 
 	 * @param charset
 	 * @return
 	 */
 	public IRestfulClient<R, S> setCharset(Charset charset);
-	
+
 	/**
 	 * 
-	 * @param contentType the content type to set
+	 * @param contentType
+	 *            the content type to set
 	 * @return
 	 */
 	public IRestfulClient<R, S> setContentType(String contentType);
-	
+
 	/**
 	 * 
 	 * @param username
@@ -73,14 +75,14 @@ public interface IRestfulClient<R, S> {
 	 * @return
 	 */
 	public IRestfulClient<R, S> setBasicAuthentication(String username, String password);
-	
+
 	/**
 	 * 
 	 * @param proxy
 	 * @return
 	 */
 	public IRestfulClient<R, S> setProxy(Proxy proxy);
-	
+
 	/**
 	 * 
 	 * @param hostname
@@ -88,7 +90,7 @@ public interface IRestfulClient<R, S> {
 	 * @return
 	 */
 	public IRestfulClient<R, S> setProxy(String hostname, int port);
-	
+
 	/**
 	 * 
 	 * @param type
@@ -97,7 +99,7 @@ public interface IRestfulClient<R, S> {
 	 * @return
 	 */
 	public IRestfulClient<R, S> setProxy(Proxy.Type type, String hostname, int port);
-	
+
 	/**
 	 * 
 	 * @param username
@@ -108,7 +110,7 @@ public interface IRestfulClient<R, S> {
 	 */
 	public IRestfulClient<R, S> setProxy(final String username, final String password, final String hostname,
 			final int port);
-	
+
 	/**
 	 * 
 	 * @param type
@@ -134,5 +136,19 @@ public interface IRestfulClient<R, S> {
 	 * @param request
 	 */
 	public void send(final Request<R, S> request);
+
+	/**
+	 * 
+	 * @param parameter
+	 * @return
+	 */
+	public IRestfulClient<R, S> add(Parameter parameter);
+
+	/**
+	 * 
+	 * @param property
+	 * @return
+	 */
+	public IRestfulClient<R, S> add(Property property);
 
 }

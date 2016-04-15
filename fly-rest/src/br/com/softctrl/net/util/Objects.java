@@ -89,23 +89,23 @@ public class Objects {
 	public static boolean equals(Object obj1, Object obj2) {
 		return obj1 == obj2 || (obj1 != null && obj1.equals(obj2));
 	}
-	
+
 	/**
 	 * 
 	 * @param obj
 	 * @return
 	 */
-	public static <T> boolean isNull(T obj){
+	public static <T> boolean isNull(T obj) {
 		return (obj == null);
 	}
-	
+
 	/**
 	 * 
 	 * @param value
 	 * @return
 	 */
-	public static boolean isNullOrEmpty(String value){
-		return ((value+"").trim().length() > 0);
+	public static boolean isNullOrEmpty(String value) {
+		return ((value + "").trim().length() > 0);
 	}
 
 	/**
@@ -113,7 +113,7 @@ public class Objects {
 	 * @param items
 	 * @return
 	 */
-	public static <T> boolean isNullOrEmpty(T[] items){
+	public static <T> boolean isNullOrEmpty(T[] items) {
 		return (isNull(items) ? true : (items.length == 0));
 	}
 
@@ -122,8 +122,29 @@ public class Objects {
 	 * @param items
 	 * @return
 	 */
-	public static <T> boolean isNullOrEmpty(List<T> items){
+	public static <T> boolean isNullOrEmpty(List<T> items) {
 		return (isNull(items) ? true : (items.size() == 0));
+	}
+
+	/**
+	 * 
+	 * @param obj
+	 * @param message
+	 * @return
+	 */
+	public static <T> T requireNonNull(T obj, String message) {
+		if (isNull(obj)) throw new IllegalArgumentException(message);
+		return obj;
+	}
+
+	/**
+	 * 
+	 * @param obj
+	 * @param defaultObj
+	 * @return
+	 */
+	public static <T> T nonNullOrDefault(T obj, T defaultObj) {
+		return (isNull(obj) ? requireNonNull(defaultObj, "Default value is not null.") : obj);
 	}
 
 }

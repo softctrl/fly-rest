@@ -20,6 +20,8 @@ import java.net.PasswordAuthentication;
 import java.net.Proxy;
 import java.net.URL;
 import java.nio.charset.Charset;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 import br.com.softctrl.net.rest.listener.RequestFinishedListener;
@@ -73,6 +75,10 @@ public abstract class AbstractHTTPRestfulClient<R, S> implements IRestfulClient<
 	protected ResponseListener<S> mResponseListener;
 	protected ResponseErrorListener mResponseErrorListener;
 	protected RequestFinishedListener<S> mRequestFinishedListener;
+	
+	protected List<Parameter> mParameters = new ArrayList<Parameter>();
+	protected List<Property> mProperties = new ArrayList<Property>();
+	protected R mBody = null;
 
 	protected Proxy mProxy = null;
 
@@ -288,6 +294,32 @@ public abstract class AbstractHTTPRestfulClient<R, S> implements IRestfulClient<
 	 * (non-Javadoc)
 	 * 
 	 * @see
+	 * br.com.softctrl.net.rest.IRestfulClient#add(br.com.softctrl.net.rest.
+	 * Parameter)
+	 */
+	@Override
+	public AbstractHTTPRestfulClient<R, S> add(Parameter parameter) {
+		this.mParameters.add(parameter);
+		return this;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * br.com.softctrl.net.rest.IRestfulClient#add(br.com.softctrl.net.rest.
+	 * Property)
+	 */
+	@Override
+	public AbstractHTTPRestfulClient<R, S> add(Property property) {
+		this.mProperties.add(property);
+		return this;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
 	 * br.com.softctrl.net.rest.IRestfulClient#newHttpConnection(br.com.softctrl
 	 * .net.rest.HttpMethod, java.lang.String)
 	 */
@@ -458,10 +490,20 @@ public abstract class AbstractHTTPRestfulClient<R, S> implements IRestfulClient<
 	/**
 	 * 
 	 * @param url
+	 */
+	public synchronized final void get(final String url) {
+		this.get(url, mBody,
+				(Objects.isNullOrEmpty(mParameters) ? null : mParameters.toArray(new Parameter[] {})),
+				(Objects.isNullOrEmpty(mProperties) ? null : mProperties.toArray(new Property[] {})));
+	}
+
+	/**
+	 * 
+	 * @param url
 	 * @param parameters
 	 */
 	public synchronized final void get(final String url, final Parameter... parameters) {
-		this.send(HttpMethod.GET, url, null, parameters);
+		this.get(url, null, parameters);
 	}
 
 	/**
@@ -471,7 +513,28 @@ public abstract class AbstractHTTPRestfulClient<R, S> implements IRestfulClient<
 	 * @param parameters
 	 */
 	public synchronized final void get(final String url, final R body, final Parameter... parameters) {
-		this.send(HttpMethod.GET, url, body, parameters);
+		this.get(url, body, parameters, null);
+	}
+
+	/**
+	 * 
+	 * @param url
+	 * @param body
+	 * @param parameters
+	 * @param properties
+	 */
+	public synchronized final void get(final String url, final R body, final Parameter[] parameters, final Property[] properties) {
+		this.send(HttpMethod.GET, url, body, parameters, properties);
+	}
+
+	/**
+	 * 
+	 * @param url
+	 */
+	public synchronized final void post(final String url) {
+		this.post(url, mBody,
+				(Objects.isNullOrEmpty(mParameters) ? null : mParameters.toArray(new Parameter[] {})),
+				(Objects.isNullOrEmpty(mProperties) ? null : mProperties.toArray(new Property[] {})));
 	}
 
 	/**
@@ -480,18 +543,51 @@ public abstract class AbstractHTTPRestfulClient<R, S> implements IRestfulClient<
 	 * @param parameters
 	 */
 	public synchronized final void post(final String url, final R body, final Parameter... parameters) {
-		this.send(HttpMethod.POST, url, body, parameters);
+		this.post(url, body, parameters, null);
 	}
 
 	/**
+	 * 
+	 * @param url
+	 * @param body
+	 * @param parameters
+	 * @param properties
+	 */
+	public synchronized final void post(final String url, final R body, final Parameter[] parameters, final Property[] properties) {
+		this.send(HttpMethod.POST, url, body, parameters, properties);
+	}
+
+	/**
+	 * 
+	 * @param url
+	 */
+	public synchronized final void delete(final String url) {
+		this.delete(url, mBody,
+				(Objects.isNullOrEmpty(mParameters) ? null : mParameters.toArray(new Parameter[] {})),
+				(Objects.isNullOrEmpty(mProperties) ? null : mProperties.toArray(new Property[] {})));
+	}
+
+	/**
+	 * 
 	 * @param url
 	 * @param body
 	 * @param parameters
 	 */
 	public synchronized final void delete(final String url, final R body, final Parameter... parameters) {
-		this.send(HttpMethod.DELETE, url, body, parameters);
+		this.delete(url, body, parameters, null);
 	}
 	
+	/**
+	 * 
+	 * @param url
+	 * @param body
+	 * @param parameters
+	 * @param properties
+	 */
+	public synchronized final void delete(final String url, final R body, final Parameter[] parameters, Property[] properties) {
+		this.send(HttpMethod.DELETE, url, body, parameters, properties);
+	}
+
 	/**
 	 * 
 	 * @param request
@@ -510,5 +606,5 @@ public abstract class AbstractHTTPRestfulClient<R, S> implements IRestfulClient<
 			}
 		}		
 	}
-	
+
 }
