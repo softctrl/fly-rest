@@ -48,4 +48,10 @@ And finally:
 		restfulClient.get(url, body);
 ```
 
+Another way to call methods:
+
+```java
+		restfulClient.add(new Property("vlr1", 102030)).get(url);
+```
+
 ### Soon (well not so soon like i want :D but....) i will add this library to maven central!!!
