@@ -48,7 +48,7 @@ And finally:
 		restfulClient.get(url, body);
 ```
 
-Another way to call methods:
+Or you can use like this:
 
 ```java
 		restfulClient.add(new Property("vlr1", 102030)).get(url);
