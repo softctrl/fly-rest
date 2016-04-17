@@ -53,5 +53,10 @@ Or you can use like this:
 ```java
 		restfulClient.add(new Property("vlr1", 102030)).get(url);
 ```
+Or:
+
+```java
+		restfulClient.add(new Property("vlr1", 102030)).post(url);
+```
 
 ### Soon (well not so soon like i want :D but....) i will add this library to maven central!!!
