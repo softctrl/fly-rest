@@ -5,7 +5,7 @@ import static java.net.URLEncoder.encode;
 
 import java.io.UnsupportedEncodingException;
 
-import br.com.softctrl.net.util.Objects;
+import br.com.softctrl.utils.Objects;
 
 
 /*
@@ -37,9 +37,9 @@ SOFTWARE.
  */
 public final class Parameter {
 	private String mName;
-	private String mValue;
+	private Object mValue;
 
-	public Parameter(String name, String value) {
+	public Parameter(String name, Object value) {
 		this.mName = name;
 		this.mValue = value;
 	}
@@ -53,7 +53,7 @@ public final class Parameter {
 	public String toString() {
 		try {
 			return (new StringBuilder(encode(this.mName, UTF_8.name()))).append('=')
-					.append(encode(this.mValue, UTF_8.name())).toString();
+					.append(encode(this.mValue + "", UTF_8.name())).toString();
 		} catch (UnsupportedEncodingException e) {
 			throw new RuntimeException(e);
 		}

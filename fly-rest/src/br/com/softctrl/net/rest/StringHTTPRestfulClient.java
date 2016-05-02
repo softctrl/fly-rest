@@ -1,6 +1,6 @@
 package br.com.softctrl.net.rest;
 
-import static br.com.softctrl.net.util.StreamUtils.streamToString;
+import static br.com.softctrl.utils.io.StreamUtils.streamToString;
 
 import java.io.InputStream;
 

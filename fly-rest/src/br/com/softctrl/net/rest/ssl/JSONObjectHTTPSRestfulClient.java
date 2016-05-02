@@ -1,6 +1,6 @@
 package br.com.softctrl.net.rest.ssl;
 
-import static br.com.softctrl.net.util.StreamUtils.streamToString;
+import static br.com.softctrl.utils.io.StreamUtils.streamToString;
 
 import java.io.InputStream;
 

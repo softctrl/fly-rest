@@ -6,7 +6,7 @@ import static br.com.softctrl.net.util.Constants.CONNECT_TIMEOUT;
 import static br.com.softctrl.net.util.Constants.CONTENT_TYPE;
 import static br.com.softctrl.net.util.Constants.READ_TIMEOUT;
 import static br.com.softctrl.net.util.Constants.UTF_8;
-import static br.com.softctrl.net.util.StreamUtils.streamToString;
+import static br.com.softctrl.utils.io.StreamUtils.streamToString;
 
 import java.io.BufferedWriter;
 import java.io.DataOutputStream;
@@ -29,7 +29,7 @@ import br.com.softctrl.net.rest.listener.ResponseErrorListener;
 import br.com.softctrl.net.rest.listener.ResponseListener;
 import br.com.softctrl.net.util.HTTPStatusCode;
 import br.com.softctrl.net.util.HTTPStatusCode.StatusCode;
-import br.com.softctrl.net.util.Objects;
+import br.com.softctrl.utils.Objects;
 
 /*
 The MIT License (MIT)

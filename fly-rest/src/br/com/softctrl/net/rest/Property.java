@@ -31,8 +31,8 @@ import static java.net.URLEncoder.encode;
 
 import java.io.UnsupportedEncodingException;
 
-import br.com.softctrl.net.util.Base64;
-import br.com.softctrl.net.util.Objects;
+import br.com.softctrl.utils.Base64;
+import br.com.softctrl.utils.Objects;
 
 /**
  * @author carlostimoshenkorodrigueslopes@gmail.com
@@ -46,9 +46,9 @@ public final class Property {
 	private static final String BASIC = "Basic ";
 
 	private String mKey;
-	private String mValue;
+	private Object mValue;
 
-	public Property(String key, String value) {
+	public Property(String key, Object value) {
 		this.mKey = key;
 		this.mValue = value;
 	}
@@ -69,7 +69,7 @@ public final class Property {
 	 * @return the value
 	 */
 	public String getValue() {
-		return mValue;
+		return mValue + "";
 	}
 
 	public synchronized static final Property getBasicHttpAuthenticationProperty(String username, String password) {
@@ -82,7 +82,7 @@ public final class Property {
 	public String toString() {
 		try {
 			return (new StringBuilder(encode(this.mKey, UTF_8.name()))).append(EQUALS)
-					.append(encode(this.mValue, UTF_8.name())).toString();
+					.append(encode(this.mValue + "", UTF_8.name())).toString();
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
 		}

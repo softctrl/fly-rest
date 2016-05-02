@@ -1,6 +1,6 @@
 package br.com.softctrl.net.rest.ssl.pinning;
 
-import static br.com.softctrl.net.util.StringUtils.byteArrayToHexString;
+import static br.com.softctrl.utils.StringUtils.byteArrayToHexString;
 
 import java.security.KeyStore;
 import java.security.MessageDigest;
