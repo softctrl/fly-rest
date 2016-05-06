@@ -60,3 +60,8 @@ Or:
 ```
 
 ### Soon (well not so soon like i want :D but....) i will add this library to maven central!!!
+
+
+You can download the last version here 
+[fly.rest-0.1.0-SNAPSHOT.jar](https://github.com/softctrl/fly-rest/blob/master/file/fly.rest-0.1.0-SNAPSHOT.jar?raw=true).
+
