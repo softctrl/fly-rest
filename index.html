@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link href='https://fonts.googleapis.com/css?family=Architects+Daughter' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/github-light.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print">
+
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <title>Fly-rest by softctrl</title>
+  </head>
+
+  <body>
+    <header>
+      <div class="inner">
+        <h1>Fly-rest</h1>
+        <h2>Restful Library to use on Android mobile projects </h2>
+        <a href="https://github.com/softctrl/fly-rest" class="button"><small>View project on</small> GitHub</a>
+      </div>
+    </header>
+
+    <div id="content-wrapper">
+      <div class="inner clearfix">
+        <section id="main-content">
+          <h3>
+<a id="fly-rest" class="anchor" href="#fly-rest" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>fly-rest</h3>
+
+<p>Restfull Library to use on Android mobile projects </p>
+
+<p>To use, just make those imports:</p>
+
+<div class="highlight highlight-source-java"><pre><span class="pl-k">import</span> <span class="pl-smi">br.com.softctrl.net.rest.StringHTTPRestfulClient</span>;
+<span class="pl-k">import</span> <span class="pl-smi">br.com.softctrl.net.rest.listener.RequestFinishedListener</span>;
+<span class="pl-k">import</span> <span class="pl-smi">br.com.softctrl.net.rest.listener.ResponseErrorListener</span>;
+<span class="pl-k">import</span> <span class="pl-smi">br.com.softctrl.net.rest.listener.ResponseListener</span>;
+<span class="pl-k">import</span> <span class="pl-smi">br.com.softctrl.net.util.HTTPStatusCode.StatusCode</span>;```
+<span class="pl-smi">And</span> create <span class="pl-v">this</span> listeners<span class="pl-k">:</span>
+```java
+        <span class="pl-k">ResponseListener&lt;<span class="pl-smi">String</span>&gt;</span> responseListener <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-k">ResponseListener&lt;<span class="pl-smi">String</span>&gt;</span>() {            
+            <span class="pl-k">@Override</span>
+            <span class="pl-k">public</span> <span class="pl-k">void</span> <span class="pl-en">onResponse</span>(<span class="pl-smi">String</span> <span class="pl-v">response</span>) {
+                <span class="pl-smi">System</span><span class="pl-k">.</span>out<span class="pl-k">.</span>println(<span class="pl-s"><span class="pl-pds">"</span>####ResponseListener<span class="pl-pds">"</span></span>);
+                <span class="pl-smi">System</span><span class="pl-k">.</span>out<span class="pl-k">.</span>println(response);
+            }
+        };
+        <span class="pl-smi">ResponseErrorListener</span> responseErrorListener <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-smi">ResponseErrorListener</span>() {         
+            <span class="pl-k">@Override</span>
+            <span class="pl-k">public</span> <span class="pl-k">void</span> <span class="pl-en">onResponseError</span>(<span class="pl-smi">StatusCode</span> <span class="pl-v">statusCode</span>, <span class="pl-smi">String</span> <span class="pl-v">serverMessage</span>, <span class="pl-smi">Throwable</span> <span class="pl-v">throwable</span>) {
+                <span class="pl-smi">System</span><span class="pl-k">.</span>out<span class="pl-k">.</span>println(<span class="pl-s"><span class="pl-pds">"</span>####ResponseErrorListener<span class="pl-pds">"</span></span>);
+                <span class="pl-smi">System</span><span class="pl-k">.</span>out<span class="pl-k">.</span>println(statusCode);
+                <span class="pl-smi">System</span><span class="pl-k">.</span>out<span class="pl-k">.</span>println(serverMessage);
+                <span class="pl-smi">System</span><span class="pl-k">.</span>out<span class="pl-k">.</span>println(throwable);
+            }
+        };
+        <span class="pl-k">RequestFinishedListener&lt;<span class="pl-smi">String</span>&gt;</span> requestFinishedListener <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-k">RequestFinishedListener&lt;<span class="pl-smi">String</span>&gt;</span>() {           
+            <span class="pl-k">@Override</span>
+            <span class="pl-k">public</span> <span class="pl-k">void</span> <span class="pl-en">onRequestFinished</span>(<span class="pl-smi">StatusCode</span> <span class="pl-v">statusCode</span>, <span class="pl-smi">String</span> <span class="pl-v">response</span>) {
+                <span class="pl-smi">System</span><span class="pl-k">.</span>out<span class="pl-k">.</span>println(<span class="pl-s"><span class="pl-pds">"</span>####RequestFinishedListener<span class="pl-pds">"</span></span>);
+                <span class="pl-smi">System</span><span class="pl-k">.</span>out<span class="pl-k">.</span>println(statusCode);
+                <span class="pl-smi">System</span><span class="pl-k">.</span>out<span class="pl-k">.</span>println(response);
+            }
+        };</pre></div>
+
+<p>You just need create a better client that you need, or maybe you can create your own(and send a pull request =D ):</p>
+
+<div class="highlight highlight-source-java"><pre>        <span class="pl-smi">StringHTTPRestfulClient</span> restfulClient <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-smi">StringHTTPRestfulClient</span>(responseListener, responseErrorListener,
+                requestFinishedListener);</pre></div>
+
+<p>And finally:</p>
+
+<div class="highlight highlight-source-java"><pre>        <span class="pl-smi">String</span> url <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">"</span>http://www.0x09.com.br/<span class="pl-pds">"</span></span>;
+        <span class="pl-smi">String</span> body <span class="pl-k">=</span> <span class="pl-c1">null</span>;
+        restfulClient<span class="pl-k">.</span>get(url, body);</pre></div>
+
+<p>Or you can use like this:</p>
+
+<div class="highlight highlight-source-java"><pre>        restfulClient<span class="pl-k">.</span>add(<span class="pl-k">new</span> <span class="pl-smi">Property</span>(<span class="pl-s"><span class="pl-pds">"</span>vlr1<span class="pl-pds">"</span></span>, <span class="pl-c1">102030</span>))<span class="pl-k">.</span>get(url);</pre></div>
+
+<p>Or:</p>
+
+<div class="highlight highlight-source-java"><pre>        restfulClient<span class="pl-k">.</span>add(<span class="pl-k">new</span> <span class="pl-smi">Property</span>(<span class="pl-s"><span class="pl-pds">"</span>vlr1<span class="pl-pds">"</span></span>, <span class="pl-c1">102030</span>))<span class="pl-k">.</span>post(url);</pre></div>
+
+<h3>
+<a id="soon-well-not-so-soon-like-i-want-d-but-i-will-add-this-library-to-maven-central" class="anchor" href="#soon-well-not-so-soon-like-i-want-d-but-i-will-add-this-library-to-maven-central" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Soon (well not so soon like i want :D but....) i will add this library to maven central!!!</h3>
+
+<p>You can download the last version here 
+<a href="https://github.com/softctrl/fly-rest/blob/master/file/fly.rest-0.1.0-SNAPSHOT.jar?raw=true">fly.rest-0.1.0-SNAPSHOT.jar</a>.</p>
+
+<h3>
+<a id="authors-and-contributors" class="anchor" href="#authors-and-contributors" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Authors and Contributors</h3>
+
+<p>Carlos Timoshenko (<a href="https://github.com/softctrl" class="user-mention">@softctrl</a>).</p>
+        </section>
+
+        <aside id="sidebar">
+          <a href="https://github.com/softctrl/fly-rest/zipball/master" class="button">
+            <small>Download</small>
+            .zip file
+          </a>
+          <a href="https://github.com/softctrl/fly-rest/tarball/master" class="button">
+            <small>Download</small>
+            .tar.gz file
+          </a>
+
+          <p class="repo-owner"><a href="https://github.com/softctrl/fly-rest"></a> is maintained by <a href="https://github.com/softctrl">softctrl</a>.</p>
+
+          <p>This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the Architect theme by <a href="https://twitter.com/jasonlong">Jason Long</a>.</p>
+        </aside>
+      </div>
+    </div>
+
+  
+  </body>
+</html>
