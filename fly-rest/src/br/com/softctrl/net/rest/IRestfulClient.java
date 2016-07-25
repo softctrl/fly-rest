@@ -6,6 +6,11 @@ package br.com.softctrl.net.rest;
 import java.net.Proxy;
 import java.net.URLConnection;
 import java.nio.charset.Charset;
+import java.util.List;
+
+import br.com.softctrl.net.rest.listener.RequestFinishedListener;
+import br.com.softctrl.net.rest.listener.ResponseErrorListener;
+import br.com.softctrl.net.rest.listener.ResponseListener;
 
 /*
 The MIT License (MIT)
@@ -37,6 +42,46 @@ SOFTWARE.
  * @author carlostimoshenkorodrigueslopes@gmail.com
  */
 public interface IRestfulClient<R, S> {
+	
+	/**
+	 * 
+	 * @param responseListener
+	 * @return
+	 */
+	public IRestfulClient<R, S> setResponseListener(ResponseListener<S> responseListener);
+	
+	/**
+	 * 
+	 * @return
+	 */
+	public ResponseListener<S> getResponseListener();
+
+	/**
+	 * 
+	 * @param responseErrorListener
+	 * @return
+	 */
+	public IRestfulClient<R, S> setResponseErrorListener(ResponseErrorListener responseErrorListener);
+
+	/**
+	 * 
+	 * @return
+	 */
+	public ResponseErrorListener getResponseErrorListener();
+	
+	/**
+	 * 
+	 * @param requestFinishedListener
+	 * @return
+	 */
+	public IRestfulClient<R, S> setRequestFinishedListener(RequestFinishedListener<S> requestFinishedListener);
+
+	/**
+	 * 
+	 * @return
+	 */
+	public RequestFinishedListener<S> getRequestFinishedListener();
+	
 
 	/**
 	 * 
@@ -150,5 +195,36 @@ public interface IRestfulClient<R, S> {
 	 * @return
 	 */
 	public IRestfulClient<R, S> add(Property property);
+	
+	/**
+	 * 
+	 * @return
+	 */
+	public R getBody();
+	
+	/**
+	 * 
+	 * @return
+	 */
+	public List<Parameter> getParameters();
+	
+	/**
+	 * 
+	 * @return
+	 */
+	public List<Property> getProperties();
+
+	/**
+	 * 
+	 * @param httpMethod
+	 * @param url
+	 * @param body
+	 * @param parameters
+	 */
+	void send(HttpMethod httpMethod, String url, R body, Parameter... parameters);
+
+	void send(HttpMethod httpMethod, String url, R body, Property... properties);
+
+	void send(HttpMethod httpMethod, String url, R body, Parameter[] parameters, Property[] property);
 
 }

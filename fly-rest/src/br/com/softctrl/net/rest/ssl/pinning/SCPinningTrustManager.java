@@ -19,6 +19,7 @@ import javax.net.ssl.TrustManagerFactory;
 import javax.net.ssl.X509TrustManager;
 
 import br.com.softctrl.net.util.Constants;
+import br.com.softctrl.utils.Objects;
 
 /*
 The MIT License (MIT)
@@ -84,11 +85,8 @@ public class SCPinningTrustManager implements X509TrustManager {
 	 */
 	@Override
 	public void checkServerTrusted(X509Certificate[] chain, String authType) throws CertificateException {
-
-		if (chain == null) {
-			throw new IllegalArgumentException(TAG + ERROR_X509_CERTIFICATE_ARRAY_IS_NULL);
-		}
-		if (chain.length < 0) {
+		Objects.requireNonNull(chain, (TAG + ERROR_X509_CERTIFICATE_ARRAY_IS_NULL));
+		if (Objects.isNullOrEmpty(chain)) {
 			throw new IllegalArgumentException(TAG + ERROR_X509_CERTIFICATE_IS_EMPTY);
 		}
 		if (this.getCache().contains(chain[0])) {

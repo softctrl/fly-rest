@@ -25,6 +25,7 @@ import br.com.softctrl.net.rest.listener.ResponseListener;
 import br.com.softctrl.net.rest.ssl.pinning.SCPinningTrustManager;
 import br.com.softctrl.net.util.Constants;
 import br.com.softctrl.net.util.HTTPStatusCode.StatusCode;
+import br.com.softctrl.utils.Objects;
 
 /*
 The MIT License (MIT)
@@ -117,11 +118,11 @@ public abstract class AbstractHTTPSRestfulClient<R, S> extends AbstractHTTPRestf
 		HttpsURLConnection connection = null;
 		try {
 			uri = new URL(url);
-			if (this.mProxy == null)
+			if (Objects.isNull(this.mProxy))
 				connection = (HttpsURLConnection) uri.openConnection();
 			else
 				connection = (HttpsURLConnection) uri.openConnection(mProxy);
-			if (this.mSslContext != null)
+			if (Objects.nonNull(this.mSslContext))
 				connection.setSSLSocketFactory(this.mSslContext.getSocketFactory());
 			connection.setRequestMethod(httpMethod.getName());
 			connection.setConnectTimeout(this.mConnectTimeout);

@@ -6,6 +6,7 @@ import static br.com.softctrl.net.util.Constants.CONNECT_TIMEOUT;
 import static br.com.softctrl.net.util.Constants.CONTENT_TYPE;
 import static br.com.softctrl.net.util.Constants.READ_TIMEOUT;
 import static br.com.softctrl.net.util.Constants.UTF_8;
+import static br.com.softctrl.utils.Objects.nonNull;
 import static br.com.softctrl.utils.io.StreamUtils.streamToString;
 
 import java.io.BufferedWriter;
@@ -72,9 +73,24 @@ public abstract class AbstractHTTPRestfulClient<R, S> implements IRestfulClient<
 	protected Charset mCharset = UTF_8;
 	protected String mContentType = APPLICATION_JSON;
 
-	protected ResponseListener<S> mResponseListener;
-	protected ResponseErrorListener mResponseErrorListener;
-	protected RequestFinishedListener<S> mRequestFinishedListener;
+	protected ResponseListener<S> mResponseListener = new ResponseListener<S>() {
+		@Override public void onResponse(S response) {
+			System.out.format("%s - %s", TAG, response + "");
+		}
+	};
+
+	protected ResponseErrorListener mResponseErrorListener = new ResponseErrorListener() {
+		@Override public void onResponseError(StatusCode statusCode, String serverMessage, Throwable throwable) {
+			System.out.format("%s\nMessage: %s\nStatus code: %s", TAG, serverMessage, statusCode);
+			throwable.printStackTrace();
+		}
+	};
+
+	protected RequestFinishedListener<S> mRequestFinishedListener = new RequestFinishedListener<S>() {
+		@Override public void onRequestFinished(StatusCode statusCode, S response) {
+			System.out.format("%s\nStatus code: %s\nResponse: ", TAG, statusCode, response);
+		}
+	};
 	
 	protected List<Parameter> mParameters = new ArrayList<Parameter>();
 	protected List<Property> mProperties = new ArrayList<Property>();
@@ -85,25 +101,7 @@ public abstract class AbstractHTTPRestfulClient<R, S> implements IRestfulClient<
 	/**
 	 * Default constructor with basic listeners.
 	 */
-	public AbstractHTTPRestfulClient() {
-		this(new ResponseListener<S>() {
-			@Override
-			public void onResponse(S response) {
-				System.out.format("%s - %s", TAG, response + "");
-			}
-		}, new ResponseErrorListener() {
-			@Override
-			public void onResponseError(StatusCode statusCode, String serverMessage, Throwable throwable) {
-				System.out.format("%s\nMessage: %s\nStatus code: %s", TAG, serverMessage, statusCode);
-				throwable.printStackTrace();
-			}
-		}, new RequestFinishedListener<S>() {
-			@Override
-			public void onRequestFinished(StatusCode statusCode, S response) {
-				System.out.format("%s\nStatus code: %s\nResponse: ", TAG, statusCode, response);
-			}
-		});
-	}
+	public AbstractHTTPRestfulClient() { }
 
 	/**
 	 * @param responseListener
@@ -118,43 +116,86 @@ public abstract class AbstractHTTPRestfulClient<R, S> implements IRestfulClient<
 		this.mRequestFinishedListener = requestFinishedListener;
 		this.validateListeners();
 	}
+	
+	/*
+	 * (non-Javadoc)
+	 * @see br.com.softctrl.net.rest.IRestfulClient#getBody()
+	 */
+	@Override public R getBody() {
+		return this.mBody;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see br.com.softctrl.net.rest.IRestfulClient#getParameters()
+	 */
+	@Override public List<Parameter> getParameters() {
+		return this.mParameters;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see br.com.softctrl.net.rest.IRestfulClient#getProperties()
+	 */
+	@Override
+	public List<Property> getProperties() {
+		return this.mProperties;
+	}
 
 	/**
 	 * Just to validate the listeners.
 	 */
 	protected final void validateListeners() {
-		if (this.mResponseListener == null)
-			throw new IllegalArgumentException("You need to provide a valid ResponseListener.");
-		if (this.mResponseErrorListener == null)
-			throw new IllegalArgumentException("You need to provide a valid ResponseErrorListener.");
-		if (this.mRequestFinishedListener == null)
-			throw new IllegalArgumentException("You need to provide a valid RequestFinishedListener.");
+		Objects.requireNonNull(this.mResponseListener, "You need to provide a valid ResponseListener.");
+		Objects.requireNonNull(this.mResponseErrorListener, "You need to provide a valid ResponseErrorListener.");
+		Objects.requireNonNull(this.mRequestFinishedListener, "You need to provide a valid RequestFinishedListener.");
 	}
 	
-	/**
-	 * 
-	 * @param responseListener
-	 * @return
+	/*
+	 * (non-Javadoc)
+	 * @see br.com.softctrl.net.rest.IRestfulClient#getResponseListener()
+	 */
+	@Override public ResponseListener<S> getResponseListener() {
+		return this.mResponseListener;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see br.com.softctrl.net.rest.IRestfulClient#setResponseListener(br.com.softctrl.net.rest.listener.ResponseListener)
 	 */
 	public AbstractHTTPRestfulClient<R, S> setResponseListener(ResponseListener<S> responseListener) {
 		this.mResponseListener = responseListener;
 		return this;
 	}
+	
+	/*
+	 * (non-Javadoc)
+	 * @see br.com.softctrl.net.rest.IRestfulClient#getResponseErrorListener()
+	 */
+	@Override public ResponseErrorListener getResponseErrorListener() {
+		return this.mResponseErrorListener;
+	}
 
-	/**
-	 * 
-	 * @param responseErrorListener
-	 * @return
+	/*
+	 * (non-Javadoc)
+	 * @see br.com.softctrl.net.rest.IRestfulClient#setResponseErrorListener(br.com.softctrl.net.rest.listener.ResponseErrorListener)
 	 */
 	public AbstractHTTPRestfulClient<R, S> setResponseErrorListener(ResponseErrorListener responseErrorListener) {
 		this.mResponseErrorListener = responseErrorListener;
 		return this;
 	}
 	
-	/**
-	 * 
-	 * @param requestFinishedListener
-	 * @return
+	/*
+	 * (non-Javadoc)
+	 * @see br.com.softctrl.net.rest.IRestfulClient#getRequestFinishedListener()
+	 */
+	@Override public RequestFinishedListener<S> getRequestFinishedListener() {
+		return this.mRequestFinishedListener;
+	}
+	
+	/*
+	 * (non-Javadoc)
+	 * @see br.com.softctrl.net.rest.IRestfulClient#setRequestFinishedListener(br.com.softctrl.net.rest.listener.RequestFinishedListener)
 	 */
 	public AbstractHTTPRestfulClient<R, S> setRequestFinishedListener(RequestFinishedListener<S> requestFinishedListener) {
 		this.mRequestFinishedListener = requestFinishedListener;
@@ -330,7 +371,7 @@ public abstract class AbstractHTTPRestfulClient<R, S> implements IRestfulClient<
 		HttpURLConnection connection = null;
 		try {
 			uri = new URL(url);
-			if (this.mProxy == null)
+			if (Objects.isNull(this.mProxy))
 				connection = (HttpURLConnection) uri.openConnection();
 			else
 				connection = (HttpURLConnection) uri.openConnection(mProxy);
@@ -352,8 +393,7 @@ public abstract class AbstractHTTPRestfulClient<R, S> implements IRestfulClient<
 	 */
 	private Response<S> perform(final Request<R, S> request) {
 
-		if (request == null)
-			throw new IllegalArgumentException("You need to send a request data.");
+		Objects.requireNonNull(request, "You need to send a request data.");
 		Response<S> result = null;
 		final HttpURLConnection connection = newURLConnection(request.getHttpMethod(), request.getUrl());
 		try {
@@ -363,7 +403,7 @@ public abstract class AbstractHTTPRestfulClient<R, S> implements IRestfulClient<
 			connection.setDoOutput(isPOST);
 			
 			// Basic HTTP Authentication
-			if (this.mBasicHttpAuthentication != null) {
+			if (Objects.nonNull(this.mBasicHttpAuthentication)) {
 				connection.setRequestProperty(this.mBasicHttpAuthentication.getKey(),
 						this.mBasicHttpAuthentication.getValue());
 			}
@@ -379,7 +419,7 @@ public abstract class AbstractHTTPRestfulClient<R, S> implements IRestfulClient<
 			// If is a POST:
 			if (isPOST) {
 				// If exists parameters:
-				if (parameters != null) {
+				if (Objects.nonNull(parameters)) {
 					OutputStream outputStream = connection.getOutputStream();
 					BufferedWriter parametersWriter = new BufferedWriter(
 							new OutputStreamWriter(outputStream, this.mCharset));
@@ -389,7 +429,7 @@ public abstract class AbstractHTTPRestfulClient<R, S> implements IRestfulClient<
 					outputStream.close();
 				}
 				// If exists body:
-				if (request.getBody() != null) {
+				if (Objects.nonNull(request.getBody())) {
 					DataOutputStream dataOutputStream = new DataOutputStream(connection.getOutputStream());
 					dataOutputStream.write(request.bodyToByteArray());
 					dataOutputStream.flush();
@@ -398,23 +438,23 @@ public abstract class AbstractHTTPRestfulClient<R, S> implements IRestfulClient<
 			}
 			connection.connect();
 			result = request.parseResponse(connection.getResponseCode(), connection.getInputStream());
-			this.mResponseListener.onResponse(result == null ? null : result.getResult());
+			if (nonNull(this.mResponseListener)) this.mResponseListener.onResponse(result == null ? null : result.getResult());
 		} catch (java.net.SocketTimeoutException e) {
 			try {
 				final String response = streamToString(connection.getErrorStream());
 				final HTTPStatusCode.StatusCode statusCode = HTTPStatusCode.resolveStatusCode(408);
-				this.mResponseErrorListener.onResponseError(statusCode, response, e);
+				if (nonNull(this.mResponseErrorListener)) this.mResponseErrorListener.onResponseError(statusCode, response, e);
 			} catch (Exception e1) {
-				this.mResponseErrorListener.onResponseError(null, null, e1);
+				if (nonNull(this.mResponseErrorListener)) this.mResponseErrorListener.onResponseError(null, null, e1);
 			}
 		} catch (IOException e) {
 			try {
 				final String response = streamToString(connection.getErrorStream());
 				final HTTPStatusCode.StatusCode statusCode = HTTPStatusCode
 						.resolveStatusCode(connection.getResponseCode());
-				this.mResponseErrorListener.onResponseError(statusCode, response, e);
+				if (nonNull(this.mResponseErrorListener)) this.mResponseErrorListener.onResponseError(statusCode, response, e);
 			} catch (Exception e2) {
-				this.mResponseErrorListener.onResponseError(null, null, e2);
+				if (nonNull(this.mResponseErrorListener)) this.mResponseErrorListener.onResponseError(null, null, e2);
 			}
 		}
 		return result;
@@ -428,7 +468,7 @@ public abstract class AbstractHTTPRestfulClient<R, S> implements IRestfulClient<
 	 * @param body
 	 * @param parameters
 	 */
-	public synchronized final void send(final HttpMethod httpMethod, final String url, final R body,
+	@Override public synchronized final void send(final HttpMethod httpMethod, final String url, final R body,
 			final Parameter... parameters) {
 		final Request<R, S> request = createRequest(httpMethod, url, body, parameters, null);
 		send((Request<R, S>) request);
@@ -442,7 +482,7 @@ public abstract class AbstractHTTPRestfulClient<R, S> implements IRestfulClient<
 	 * @param body
 	 * @param properties
 	 */
-	public synchronized final void send(final HttpMethod httpMethod, final String url, final R body,
+	@Override public synchronized final void send(final HttpMethod httpMethod, final String url, final R body,
 			final Property... properties) {
 		final Request<R, S> request = createRequest(httpMethod, url, body, null, properties);
 		send((Request<R, S>) request);
@@ -457,7 +497,7 @@ public abstract class AbstractHTTPRestfulClient<R, S> implements IRestfulClient<
 	 * @param parameters
 	 * @param property
 	 */
-	public synchronized final void send(final HttpMethod httpMethod, final String url, final R body,
+	@Override public synchronized final void send(final HttpMethod httpMethod, final String url, final R body,
 			final Parameter[] parameters, final Property[] property) {
 		final Request<R, S> request = createRequest(httpMethod, url, body, parameters, property);
 		send((Request<R, S>) request);
@@ -484,7 +524,7 @@ public abstract class AbstractHTTPRestfulClient<R, S> implements IRestfulClient<
 		final Response<S> response = perform(request);
 		final HTTPStatusCode.StatusCode statusCode = (response == null ? null : response.getStatusCode());
 		final S result = (response == null ? null : response.getResult());
-		this.mRequestFinishedListener.onRequestFinished(statusCode, result);
+		if (nonNull(this.mRequestFinishedListener)) this.mRequestFinishedListener.onRequestFinished(statusCode, result);
 	}
 
 	/**
@@ -605,6 +645,14 @@ public abstract class AbstractHTTPRestfulClient<R, S> implements IRestfulClient<
 				request.add(property);
 			}
 		}		
+	}
+	
+	/**
+	 * 
+	 * @return
+	 */
+	public br.com.softctrl.net.rest.Sync<R, S> Sync(){
+		return new Sync<R, S>(this);
 	}
 
 }
