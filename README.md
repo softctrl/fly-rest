@@ -58,8 +58,13 @@ Or:
 ```java
 		restfulClient.add(new Property("vlr1", 102030)).post(url);
 ```
+or:
+```java
+		final String response = client.Sync().add(new Property("vlr1", 102030)).get(url);
+```
 
-### Soon (well not so soon like i want :D but....) i will add this library to maven central!!!
+
+### Soon (well not so soon like i want :( but....) i will add this library to maven central!!!
 
 
 You can download the last version here 
