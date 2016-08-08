@@ -335,4 +335,48 @@ public class Sync<R, S> implements IRestfulClient<R, S> {
 		return wrapper.getValue();
 	}
 
+	/**
+	 * 
+	 * @param url
+	 * @return
+	 */
+	public synchronized final S post(final String url) {
+		return this.post(url, null);
+	}
+
+	/**
+	 * 
+	 * @param url
+	 * @param body
+	 * @param parameters
+	 * @return
+	 */
+	public synchronized final S post(final String url, final R body, final Parameter... parameters) {
+		return this.post(url, body, parameters, null);
+	}
+
+	/**
+	 * 
+	 * @param url
+	 * @param body
+	 * @param parameters
+	 * @param properties
+	 * @return
+	 */
+	public synchronized final S post(final String url, final R body, final Parameter[] parameters, final Property[] properties) {
+
+		final Wrapper<S> wrapper = new Wrapper<S>(); 
+		final RequestFinishedListener<S> rfl1 =  this.getRequestFinishedListener();
+		final RequestFinishedListener<S> rfl2 = new RequestFinishedListener<S>() {
+			@Override public void onRequestFinished(StatusCode statusCode, S response) {
+				rfl1.onRequestFinished(statusCode, response);
+				wrapper.setValue(response);
+			}
+		};
+		this.setRequestFinishedListener(rfl2);
+		this.send(HttpMethod.POST, url, body, parameters, properties);
+		return wrapper.getValue();
+
+	}
+
 }
