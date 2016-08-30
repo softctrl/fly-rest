@@ -290,8 +290,8 @@ public class Sync<R, S> implements IRestfulClient<R, S> {
 	 */
 	public synchronized final S get(final String url) {
 		return this.get(url, this.getBody(),
-				(Objects.isNullOrEmpty(this.getParameters()) ? null : this.getParameters().toArray(new Parameter[] {})),
-				(Objects.isNullOrEmpty(this.getProperties()) ? null : this.getProperties().toArray(new Property[] {})));
+				        this.getValidParameters(),
+				        this.getValidProperties());
 	}
 
 	/**
@@ -302,7 +302,7 @@ public class Sync<R, S> implements IRestfulClient<R, S> {
 	public synchronized final S get(final String url, final Parameter... parameters) {
 		return this.get(url, this.getBody(),
 				        parameters,
-				        (Objects.isNullOrEmpty(this.getProperties()) ? null : this.getProperties().toArray(new Property[] {})));
+				        this.getValidProperties());
 	}
 
 	/**
@@ -314,7 +314,7 @@ public class Sync<R, S> implements IRestfulClient<R, S> {
 	public synchronized final S get(final String url, final R body, final Parameter... parameters) {
 		return this.get(url, body,
 				        parameters,
-				        (Objects.isNullOrEmpty(this.getProperties()) ? null : this.getProperties().toArray(new Property[] {})));
+				        this.getValidProperties());
 	}
 
 	/**
@@ -346,8 +346,8 @@ public class Sync<R, S> implements IRestfulClient<R, S> {
 	 */
 	public synchronized final S post(final String url) {
 		return this.post(url, this.getBody(),
-				(Objects.isNullOrEmpty(this.getParameters()) ? null : this.getParameters().toArray(new Parameter[] {})),
-				(Objects.isNullOrEmpty(this.getProperties()) ? null : this.getProperties().toArray(new Property[] {})));
+				         this.getValidParameters(),
+				         this.getValidProperties());
 		
 	}
 
@@ -361,9 +361,9 @@ public class Sync<R, S> implements IRestfulClient<R, S> {
 	public synchronized final S post(final String url, final R body, final Parameter... parameters) {
 		return this.post(url, body,
 				         parameters,
-				         (Objects.isNullOrEmpty(this.getProperties()) ? null : this.getProperties().toArray(new Property[] {})));
+				         this.getValidProperties());
 	}
-
+	
 	/**
 	 * 
 	 * @param url
@@ -387,5 +387,23 @@ public class Sync<R, S> implements IRestfulClient<R, S> {
 		return wrapper.getValue();
 
 	}
+	
+	
+	/**
+	 * 
+	 * @return
+	 */
+	protected Parameter[] getValidParameters(){
+		return (Objects.isNullOrEmpty(this.getParameters()) ? null : this.getParameters().toArray(new Parameter[] {}));
+	}
+
+	/**
+	 * 
+	 * @return
+	 */
+	protected Property[] getValidProperties(){
+		return (Objects.isNullOrEmpty(this.getProperties()) ? null : this.getProperties().toArray(new Property[] {}));
+	}
+	
 
 }
