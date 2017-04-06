@@ -162,6 +162,7 @@ public abstract class AbstractHTTPSRestfulClient<R, S> extends AbstractHTTPRestf
 	public AbstractHTTPSRestfulClient<R, S> setupTrustManager(TrustManager[] trustManagers)
 			throws KeyManagementException, NoSuchAlgorithmException {
 		this.mSslContext = SSLContext.getInstance(Constants.TLS);
+//		this.mSslContext.createSSLEngine().set.setEnabledProtocols(new String[]{"TLSv1", "SSLv3"});
 		this.mSslContext.init(null, trustManagers, null);
 		HttpsURLConnection.setDefaultSSLSocketFactory(this.mSslContext.getSocketFactory());
 		return this;

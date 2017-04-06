@@ -390,13 +390,12 @@ public abstract class AbstractHTTPRestfulClient<R, S> implements IRestfulClient<
 	 * @param request
 	 * @return
 	 */
-	private Response<S> perform(final Request<R, S> request) {
+	protected Response<S> perform(final Request<R, S> request) {
 
 		Objects.requireNonNull(request, "You need to send a request data.");
 		Response<S> result = null;
 		final HttpURLConnection connection = newURLConnection(request.getHttpMethod(), request.getUrl());
 		try {
-			final String parameters = request.getParameters();
 			connection.setDoInput(true);
 			final boolean isPOST = HttpMethod.POST.equals(request.getHttpMethod());
 			connection.setDoOutput(isPOST);
@@ -418,6 +417,7 @@ public abstract class AbstractHTTPRestfulClient<R, S> implements IRestfulClient<
 			// If is a POST:
 			if (isPOST) {
 				// If exists parameters:
+				final String parameters = request.getStringParameters();
 				if (Objects.nonNull(parameters)) {
 					OutputStream outputStream = connection.getOutputStream();
 					BufferedWriter parametersWriter = new BufferedWriter(
@@ -584,8 +584,10 @@ public abstract class AbstractHTTPRestfulClient<R, S> implements IRestfulClient<
 	 * @param parameters
 	 */
 	public synchronized final void post(final String url, final R body, final Parameter... parameters) {
-		this.post(url, body, parameters,
+
+		this.post(url, body, (Objects.isNullOrEmpty(parameters) ? this.getValidParameters() : parameters),
 				  this.getValidProperties());
+
 	}
 
 	/**

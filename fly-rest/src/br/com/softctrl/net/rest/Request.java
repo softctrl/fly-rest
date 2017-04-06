@@ -1,6 +1,7 @@
 package br.com.softctrl.net.rest;
 
 import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
 
 /*
 The MIT License (MIT)
@@ -83,8 +84,9 @@ public abstract class Request<R, S> {
 	 * @param name
 	 * @param value
 	 * @return
+	 * @throws UnsupportedEncodingException 
 	 */
-	public Request<R, S> addParameter(String name, String value) {
+	public Request<R, S> addParameter(String name, String value) throws UnsupportedEncodingException {
 		return this.add(new Parameter(name, value));
 	}
 
@@ -134,7 +136,7 @@ public abstract class Request<R, S> {
 		final StringBuilder url = new StringBuilder(this.mUrl);
 		if (HttpMethod.GET.equals(this.getHttpMethod())) {
 			if (this.mParameters != null && this.mParameters.size() > 0) {
-				url.append('?').append(this.getParameters());
+				url.append('?').append(this.getStringParameters());
 			}
 		}
 		return url.toString();
@@ -161,7 +163,7 @@ public abstract class Request<R, S> {
 	 * 
 	 * @return
 	 */
-	public String getParameters() {
+	public String getStringParameters() {
 
 		if (this.mParameters.size() > 0) {
 			StringBuilder parameters = new StringBuilder();
@@ -174,6 +176,14 @@ public abstract class Request<R, S> {
 		}
 		return null;
 
+	}
+	
+	/**
+	 * 
+	 * @return
+	 */
+	public Set<Parameter> getParameters() {
+		return mParameters;
 	}
 
 	/**

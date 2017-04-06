@@ -36,27 +36,53 @@ SOFTWARE.
  * @author carlostimoshenkorodrigueslopes@gmail.com
  */
 public final class Parameter {
-	private String mName;
-	private Object mValue;
 
-	public Parameter(String name, Object value) {
-		this.mName = name;
-		this.mValue = value;
+	private String mName;
+	private String mValue;
+
+	/**
+	 * 
+	 * @param name
+	 * @param value
+	 * @throws UnsupportedEncodingException 
+	 */
+	public Parameter(String name, Object value) throws UnsupportedEncodingException {
+		this.mName = encode(name, UTF_8.name());
+		this.mValue = encode(value + "", UTF_8.name());
 	}
 
+	/**
+	 * 
+	 * @return
+	 */
+	public String getName() {
+		return mName;
+	}
+	
+	/**
+	 * 
+	 * @return
+	 */
+	public String getValue() {
+		return this.mValue;
+	}
+	
+	/*
+	 * (non-Javadoc)
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
 	@Override
 	public boolean equals(Object o) {
 		return Objects.equals(this.mName, ((Parameter) o).mName);
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
 	@Override
 	public String toString() {
-		try {
-			return (new StringBuilder(encode(this.mName, UTF_8.name()))).append('=')
-					.append(encode(this.mValue + "", UTF_8.name())).toString();
-		} catch (UnsupportedEncodingException e) {
-			throw new RuntimeException(e);
-		}
+		return (new StringBuilder(this.mName)).append('=').append(this.mValue).toString();
 	}
 
 }
