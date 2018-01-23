@@ -397,8 +397,8 @@ public abstract class AbstractHTTPRestfulClient<R, S> implements IRestfulClient<
 		final HttpURLConnection connection = newURLConnection(request.getHttpMethod(), request.getUrl());
 		try {
 			connection.setDoInput(true);
-			final boolean isPOST = HttpMethod.POST.equals(request.getHttpMethod());
-			connection.setDoOutput(isPOST);
+			final boolean isPostOrPut = HttpMethod.POST.equals(request.getHttpMethod()) || HttpMethod.PUT.equals(request.getHttpMethod();
+			connection.setDoOutput(isPostOrPut);
 			
 			// Basic HTTP Authentication
 			if (Objects.nonNull(this.mBasicHttpAuthentication)) {
@@ -415,7 +415,7 @@ public abstract class AbstractHTTPRestfulClient<R, S> implements IRestfulClient<
 			}
 			
 			// If is a POST:
-			if (isPOST) {
+			if (isPostOrPut) {
 				// If exists parameters:
 				final String parameters = request.getStringParameters();
 				if (Objects.nonNull(parameters)) {
@@ -599,6 +599,39 @@ public abstract class AbstractHTTPRestfulClient<R, S> implements IRestfulClient<
 	 */
 	public synchronized final void post(final String url, final R body, final Parameter[] parameters, final Property[] properties) {
 		this.send(HttpMethod.POST, url, body, parameters, properties);
+	}
+
+	/**
+	 *
+	 * @param url
+	 */
+	public synchronized final void put(final String url) {
+		this.put(url, mBody,
+				this.getValidParameters(),
+				this.getValidProperties());
+	}
+
+	/**
+	 * @param url
+	 * @param body
+	 * @param parameters
+	 */
+	public synchronized final void put(final String url, final R body, final Parameter... parameters) {
+
+		this.put(url, body, (Objects.isNullOrEmpty(parameters) ? this.getValidParameters() : parameters),
+				this.getValidProperties());
+
+	}
+
+	/**
+	 *
+	 * @param url
+	 * @param body
+	 * @param parameters
+	 * @param properties
+	 */
+	public synchronized final void put(final String url, final R body, final Parameter[] parameters, final Property[] properties) {
+		this.send(HttpMethod.PUT, url, body, parameters, properties);
 	}
 
 	/**
